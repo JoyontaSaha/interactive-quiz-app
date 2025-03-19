@@ -17,7 +17,7 @@ This project is an interactive quiz application that allows users to upload or p
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/JoyontaSaha/InteractiveQuizApp.git
+   git clone https://github.com/JoyontaSaha/interactive-quiz-app.git
    ```
 2. Navigate to the project directory:
    ```bash
