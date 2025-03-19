@@ -2,6 +2,9 @@
 
 This project is an interactive quiz application that allows users to upload or paste quiz data in JSON format and take quizzes with a timer option. The application supports both light and dark themes and provides feedback on quiz performance. Easily generate quizzes using language models and customize your learning experience.
 
+## 🚀 Live Demo
+**Try it now:** [https://joyontasaha.github.io/interactive-quiz-app/](https://joyontasaha.github.io/interactive-quiz-app/)
+
 ## Features
 - Upload or paste quiz data in JSON format.
 - Toggle between light and dark themes.
@@ -21,7 +24,7 @@ This project is an interactive quiz application that allows users to upload or p
    ```
 2. Navigate to the project directory:
    ```bash
-   cd InteractiveQuizApp
+   cd interactive-quiz-app
    ```
 3. Open `index.html` in your web browser to start the application.
 

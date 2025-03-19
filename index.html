@@ -41,7 +41,7 @@
             --incorrect-color: #ef9a9a;
             --skipped-color: #ffb74d;
             --button-bg: #0d47a1;
-            --button-color: #e0e0e0;
+            --button-color: #ffffff;
             --disabled-button: #424242;
             --score-container: #1b5e20;
             --json-sample-bg: #263238;
@@ -222,7 +222,63 @@
             border-radius: 5px;
             width: 25%;
             font-weight: bold;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
+        
+        /* Enhanced score box labels */
+        .score-box br {
+            display: block;
+            content: "";
+            margin-top: 8px;
+        }
+        
+        /* Score values */
+        .score-box span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: block;
+            margin-top: 5px;
+        }
+        
+        /* Dark mode specific enhancements for score boxes */
+        [data-theme="dark"] .score-box {
+            color: #ffffff;
+            text-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* Specific score box colors and text colors */
+        .correct-score-box {
+            background-color: var(--correct-bg);
+            color: var(--correct-color);
+        }
+        
+        .incorrect-score-box {
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-color);
+        }
+        
+        .skipped-score-box {
+            background-color: #fff3c2;
+            color: #b76e00;
+            border: 1px solid #ffca28;
+        }
+        
+        [data-theme="dark"] .correct-score-box {
+            color: #e8f5e9;
+        }
+        
+        [data-theme="dark"] .incorrect-score-box {
+            color: #ffebee;
+        }
+        
+        [data-theme="dark"] .skipped-score-box {
+            background-color: #665200;
+            color: #ffe082;
+            border: 1px solid #ffd54f;
+        }
+        
         .restart-quiz-btn {
             background-color: var(--button-bg);
             color: var(--button-color);
@@ -470,6 +526,20 @@
             height: 16px;
         }
         
+        /* Ensure button text is always visible in both themes */
+        [data-theme="dark"] .nav-button,
+        [data-theme="dark"] .action-button,
+        [data-theme="dark"] .toggle-btn,
+        [data-theme="dark"] .json-btn,
+        [data-theme="dark"] .upload-btn,
+        [data-theme="dark"] .sample-btn,
+        [data-theme="dark"] .restart-quiz-btn,
+        [data-theme="dark"] .change-quiz-btn {
+            color: #ffffff;
+            font-weight: 500;
+            text-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+        }
+        
         /* Timer styling */
         .timer-container {
             background-color: var(--option-bg);
@@ -711,7 +781,7 @@
         <div style="margin-top: 15px;">
             <button id="sample-button" class="sample-btn btn-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path>
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path>
                 </svg>
                 View Sample Format
             </button>
@@ -817,13 +887,13 @@
             <p>You've completed the quiz!</p>
             
             <div class="score-details">
-                <div class="score-box" style="background-color: #c8e6c9;">
+                <div class="score-box correct-score-box">
                     Correct<br><span id="final-correct">0</span>
                 </div>
-                <div class="score-box" style="background-color: #ffcdd2;">
+                <div class="score-box incorrect-score-box">
                     Incorrect<br><span id="final-incorrect">0</span>
                 </div>
-                <div class="score-box" style="background-color: #fff9c4;">
+                <div class="score-box skipped-score-box">
                     Skipped<br><span id="final-skipped">0</span>
                 </div>
             </div>
