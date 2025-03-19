@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Interactive Quiz</title>
+    <style>
+        :root {
+            /* Light mode variables */
+            --background-color: #ffffff;
+            --text-color: #333333;
+            --container-bg: #f9f9f9;
+            --option-bg: #e3f2fd;
+            --option-border: #90caf9;
+            --option-hover: #bbdefb;
+            --correct-bg: #c8e6c9;
+            --correct-color: #2e7d32;
+            --incorrect-bg: #ffcdd2;
+            --incorrect-color: #c62828;
+            --skipped-color: #ff9800;
+            --button-bg: #2196f3;
+            --button-color: white;
+            --disabled-button: #bdbdbd;
+            --score-container: #e8f5e9;
+            --json-sample-bg: #f5f5f5;
+            --modal-bg: #fff;
+            --modal-overlay: rgba(0,0,0,0.7);
+        }
+        
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --background-color: #121212;
+            --text-color: #e0e0e0;
+            --container-bg: #1e1e1e;
+            --option-bg: #2c3e50;
+            --option-border: #34495e;
+            --option-hover: #3e5871;
+            --correct-bg: #295c3d;
+            --correct-color: #81c784;
+            --incorrect-bg: #7a2828;
+            --incorrect-color: #ef9a9a;
+            --skipped-color: #ffb74d;
+            --button-bg: #0d47a1;
+            --button-color: #e0e0e0;
+            --disabled-button: #424242;
+            --score-container: #1b5e20;
+            --json-sample-bg: #263238;
+            --modal-bg: #212121;
+            --modal-overlay: rgba(0,0,0,0.8);
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .quiz-container {
+            background-color: var(--container-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .options {
+            margin-top: 10px;
+        }
+        .option {
+            margin: 8px 0;
+            padding: 10px;
+            background-color: var(--option-bg);
+            border: 1px solid var(--option-border);
+            border-radius: 4px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            color: var(--text-color);
+        }
+        .option:hover {
+            background-color: var(--option-hover);
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .correct {
+            background-color: var(--correct-bg);
+            color: var(--correct-color);
+        }
+        .incorrect {
+            background-color: var(--incorrect-bg);
+            color: var(--incorrect-color);
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .nav-button {
+            padding: 10px 15px;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        .nav-button:disabled {
+            background-color: var(--disabled-button);
+            cursor: not-allowed;
+        }
+        .skip-button {
+            background-color: var(--skipped-color);
+        }
+        .try-again-button {
+            background-color: #9c27b0;
+        }
+        .progress {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .score-container {
+            background-color: var(--score-container);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .score {
+            font-weight: bold;
+        }
+        .correct-score {
+            color: var(--correct-color);
+        }
+        .incorrect-score {
+            color: var(--incorrect-color);
+        }
+        .skipped-score {
+            color: var(--skipped-color);
+        }
+        .top-actions {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .action-button {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .restart-button {
+            background-color: #f44336;
+            color: white;
+        }
+        .review-button {
+            background-color: #009688;
+            color: white;
+        }
+        /* Congratulations Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-overlay);
+            overflow: auto;
+        }
+        .modal-content {
+            background-color: var(--modal-bg);
+            margin: 10% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+            animation: modalFadeIn 0.5s;
+        }
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        .modal h2 {
+            color: var(--correct-color);
+            margin-bottom: 20px;
+        }
+        .modal p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .score-details {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .score-box {
+            padding: 15px;
+            border-radius: 5px;
+            width: 25%;
+            font-weight: bold;
+        }
+        .restart-quiz-btn {
+            background-color: var(--button-bg);
+            color: var(--button-color);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        
+        /* Fireworks Animation */
+        .pyro {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1001;
+            pointer-events: none;
+        }
+        .pyro > .before, .pyro > .after {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 #fff;
+            animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
+        }
+        .pyro > .after {
+            animation-delay: 1.25s, 1.25s, 1.25s;
+            animation-duration: 1.25s, 1.25s, 6.25s;
+        }
+        @keyframes bang {
+            to {
+                box-shadow: -70px -115.67px #00ff73, 58px -63.67px #0051ff, -117px -95.67px #ff009d, -62px 8.33px #ff0055, -76px -89.67px #8000ff, -108px -51.67px #ffae00, 116px -85.67px #ff0033, 32px -43.67px #00ffea, -124px 31.33px #00ff4d, 116px -100.67px #ff006a, 56px -97.67px #ffd000, 30px -46.67px #ff0900, -38px 33.33px #00ffa2, 25px -123.67px #00ffe6, -54px 24.33px #00ffbb, -60px -99.67px #ff7300, 64px 10.33px #ff00bf, -79px -107.67px #0099ff, 114px 34.33px #ff0084, 24px -82.67px #ff006a;
+            }
+        }
+        @keyframes gravity {
+            to {
+                transform: translateY(200px);
+                opacity: 0;
+            }
+        }
+        @keyframes position {
+            0%, 19.9% {
+                margin-top: 10%;
+                margin-left: 40%;
+            }
+            20%, 39.9% {
+                margin-top: 5%;
+                margin-left: 30%;
+            }
+            40%, 59.9% {
+                margin-top: 0%;
+                margin-left: 70%;
+            }
+            60%, 79.9% {
+                margin-top: 5%;
+                margin-left: 20%;
+            }
+            80%, 99.9% {
+                margin-top: 0%;
+                margin-left: 80%;
+            }
+        }
+        
+        /* File upload styling */
+        .upload-container {
+            background-color: var(--score-container);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .upload-btn, .sample-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .upload-btn {
+            background-color: #4d6bfe;
+        }
+        .sample-btn {
+            background-color: #4CAF50;
+        }
+        .upload-btn:hover{
+            background-color: #3c5cfb;
+        }
+        .sample-btn:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none;
+        }
+        .json-sample {
+            background-color: var(--json-sample-bg);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            text-align: left;
+            overflow-x: auto;
+            max-height: 200px;
+            overflow-y: auto;
+            color: var(--text-color);
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        .error-message {
+            color: var(--incorrect-color);
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        /* Input method toggle */
+        .input-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        .toggle-btn {
+            background-color: var(--disabled-button);
+            color: var(--button-color);
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .toggle-btn.active {
+            background-color: #4CAF50;
+        }
+        .json-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid var(--option-border);
+            border-radius: 4px;
+            font-family: monospace;
+            resize: vertical;
+            margin-bottom: 10px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+        .json-paste-container {
+            margin-bottom: 15px;
+        }
+        .paste-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .json-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: var(--button-bg);
+            color: var(--button-color);
+        }
+        .json-btn:hover {
+            background-color: #0b7dda;
+        }
+        .clear-btn {
+            background-color: #f44336;
+        }
+        .clear-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        /* Copy button styling */
+        .sample-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 5px;
+            gap: 5px;
+        }
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background-color: #7e57c2;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .copy-btn:hover {
+            background-color: #673ab7;
+        }
+        .copy-success {
+            background-color: #43a047;
+            transition: background-color 0.3s;
+        }
+        
+        /* Add button styling for change quiz button */
+        .change-quiz-btn {
+            background-color: #673ab7;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .change-quiz-btn:hover {
+            background-color: #5e35b1;
+        }
+        
+        /* Animation for hide/show */
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Button icon styling */
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Timer styling */
+        .timer-container {
+            background-color: var(--option-bg);
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timer-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .timer-warning {
+            color: #f57f17;
+        }
+        
+        .timer-danger {
+            color: #c62828;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .timer-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timer-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .timer-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .timer-label svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* Dark mode toggle styling */
+        .theme-toggle-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theme-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .theme-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .theme-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .theme-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .theme-slider {
+            background-color: #2196F3;
+        }
+        
+        input:focus + .theme-slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+        
+        input:checked + .theme-slider:before {
+            transform: translateX(30px);
+        }
+        
+        .theme-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 24px;
+            width: 24px;
+        }
+        
+        select, option {
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            border: 1px solid var(--option-border);
+            padding: 5px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dark mode toggle switch -->
+    <div class="theme-toggle-container">
+        <div class="theme-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
+                <path d="M12 4l-1.34 5.34L5.34 12 10.66 13.34 12 19l1.34-5.66L19 12l-5.34-1.34z" opacity=".3"/>
+                <path d="M12 2L9.19 8.63 2 12l7.19 3.37L12 22l2.81-6.63L22 12l-7.19-3.37L12 2zm0 15.54l-1.63-3.92-4.01-.43 2.92-2.84-.45-3.89L12 8.04l3.17-1.56-.45 3.88 2.91 2.83-4.02.44L12 17.54z"/>
+            </svg>
+        </div>
+        <label class="theme-toggle">
+            <input type="checkbox" id="theme-toggle-switch">
+            <span class="theme-slider"></span>
+        </label>
+        <div class="theme-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+            </svg>
+        </div>
+    </div>
+    
+    <h1 id="quiz-heading">Interactive Quiz</h1>
+    
+    <div id="upload-section" class="upload-container">
+        <h2>Upload Quiz Data</h2>
+        
+        <!-- Timer Settings -->
+        <div class="timer-container">
+            <div class="timer-toggle">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="timer-toggle-switch">
+                    <span class="slider"></span>
+                </label>
+                <span class="timer-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42A8.962 8.962 0 0012 4c-4.97 0-9 4.03-9 9s4.02 9 9 9a8.994 8.994 0 007.03-14.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path>
+                    </svg>
+                    Enable Timer
+                </span>
+            </div>
+            <div class="timer-options" id="timer-options" style="display: none;">
+                <label for="timer-duration">Duration:</label>
+                <select id="timer-duration">
+                    <option value="5">5 minutes</option>
+                    <option value="10">10 minutes</option>
+                    <option value="15">15 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">1 hour</option>
+                    <option value="90">1.5 hours</option>
+                    <option value="120">2 hours</option>
+                    <option value="180">3 hours</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="input-toggle">
+            <button id="upload-toggle" class="toggle-btn active btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    <path d="M9 16h6v-6h4l-7-7-7 7h4z"></path>
+                </svg>
+                Upload File
+            </button>
+            <button id="paste-toggle" class="toggle-btn btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 1.99 2H18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1-1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z"></path>
+                </svg>
+                Paste JSON
+            </button>
+        </div>
+        
+        <!-- File Upload Option -->
+        <div id="file-upload-container" class="file-upload">
+            <input type="file" id="quiz-file" accept=".json" class="hidden">
+            <button id="upload-button" class="upload-btn btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path>
+                </svg>
+                Choose Quiz JSON File
+            </button>
+            <span id="file-name">No file selected</span>
+        </div>
+        
+        <!-- JSON Paste Option -->
+        <div id="json-paste-container" class="json-paste-container" style="display: none;">
+            <textarea id="json-input" class="json-input" placeholder="Paste your quiz JSON here..."></textarea>
+            <div class="paste-actions">
+                <button id="load-json-btn" class="json-btn btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 16c-2.05 0-3.81-1.24-4.58-3h1.71c.63.9 1.68 1.5 2.87 1.5 1.93 0 3.5-1.57 3.5-3.5S13.93 9.5 12 9.5c-1.35 0-2.52.78-3.1 1.9l1.6 1.6h-4V9l1.3 1.3C8.69 8.92 10.23 8 12 8c2.76 0 5 2.24 5 5s-2.24 5-5 5z"></path>
+                    </svg>
+                    Load Quiz from JSON
+                </button>
+                <button id="clear-json-btn" class="json-btn clear-btn btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                    </svg>
+                    Clear
+                </button>
+            </div>
+        </div>
+        
+        <div id="error-message" class="error-message" style="display: none;"></div>
+        
+        <div style="margin-top: 15px;">
+            <button id="sample-button" class="sample-btn btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"></path>
+                </svg>
+                View Sample Format
+            </button>
+            <button id="download-sample" class="sample-btn btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+                </svg>
+                Download Sample JSON
+            </button>
+            <div id="json-sample" class="json-sample" style="display: none;">
+                <div class="sample-actions">
+                    <button id="copy-sample" class="copy-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                        Copy JSON
+                    </button>
+                </div>
+                <pre id="sample-content"></pre>
+            </div>
+        </div>
+    </div>
+    
+    <div id="quiz-content" style="display: none;">
+        <div class="top-actions">
+            <button id="change-quiz-button" class="change-quiz-btn btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L11 13.17l6.59-6.59L19 8l-7 7z"></path>
+                </svg>
+                Change Quiz
+            </button>
+            <button id="restart-button" class="action-button restart-button btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
+                </svg>
+                Restart Quiz
+            </button>
+            <button id="review-button" class="action-button review-button btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"></path>
+                </svg>
+                Review Wrong Answers
+            </button>
+        </div>
+        
+        <!-- Timer display -->
+        <div class="timer-container" id="quiz-timer" style="display: none;">
+            <div class="timer-display">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42A8.962 8.962 0 0012 4c-4.97 0-9 4.03-9 9s4.02 9 9 9a8.994 8.994 0 007.03-14.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path>
+                </svg>
+                <span id="time-remaining">00:00</span>
+            </div>
+        </div>
+        
+        <div class="score-container">
+            <div class="score correct-score">Correct: <span id="correct-count">0</span></div>
+            <div class="score skipped-score">Skipped: <span id="skipped-count">0</span></div>
+            <div class="score">Total Answered: <span id="total-answered">0</span>/<span id="total-questions">0</span></div>
+            <div class="score incorrect-score">Incorrect: <span id="incorrect-count">0</span></div>
+        </div>
+        
+        <div class="progress">Question <span id="current-question">1</span> of <span id="question-count">0</span></div>
+        <div id="quiz-container" class="quiz-container">
+            <div class="question" id="question"></div>
+            <div class="options" id="options-container"></div>
+            <div id="feedback" class="result" style="display: none;"></div>
+        </div>
+        <div class="navigation">
+            <button id="prev-button" class="nav-button btn-icon" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                </svg>
+                Previous
+            </button>
+            <button id="skip-button" class="nav-button skip-button btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 6.83L16.59 5.41 12 10l-4.59-4.59L6 6.83 10.59 11.5 6 16.17l1.41 1.42L12 13l4.59 4.59L18 16.17l-4.59-4.67z"></path>
+                </svg>
+                Skip Question
+            </button>
+            <button id="try-again-button" class="nav-button try-again-button btn-icon" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
+                </svg>
+                Try Again
+            </button>
+            <button id="next-button" class="nav-button btn-icon" disabled>
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Congratulations Modal -->
+    <div id="congratulations-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('congratulations-modal').style.display='none'">&times;</span>
+            <h2>Congratulations! 🎉</h2>
+            <p>You've completed the quiz!</p>
+            
+            <div class="score-details">
+                <div class="score-box" style="background-color: #c8e6c9;">
+                    Correct<br><span id="final-correct">0</span>
+                </div>
+                <div class="score-box" style="background-color: #ffcdd2;">
+                    Incorrect<br><span id="final-incorrect">0</span>
+                </div>
+                <div class="score-box" style="background-color: #fff9c4;">
+                    Skipped<br><span id="final-skipped">0</span>
+                </div>
+            </div>
+            
+            <p id="performance-message">Well done!</p>
+            
+            <button class="restart-quiz-btn btn-icon" onclick="restartQuiz()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
+                </svg>
+                Take Quiz Again
+            </button>
+        </div>
+    </div>
+    
+    <!-- Fireworks -->
+    <div class="pyro" id="fireworks" style="display: none;">
+        <div class="before"></div>
+        <div class="after"></div>
+    </div>
+
+    <script>
+        // Dark mode functionality
+        // Check for saved theme preference or OS preference
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle-switch');
+            
+            // Check for saved theme preference or use OS preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDarkScheme.matches)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.checked = true;
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeToggle.checked = false;
+            }
+            
+            // Toggle theme when switch is clicked
+            themeToggle.addEventListener('change', () => {
+                if (themeToggle.checked) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        });
+      
+        // Default quiz data structure
+        let quizData = {
+            title: "Interactive Quiz",
+            heading: "Interactive Quiz",
+            questions: []
+        };
+        
+        const sampleQuizData = {
+            title: "Computer Science Basics Quiz",
+            heading: "Test Your CS Knowledge",
+            questions: [
+                {
+                    question: "What does CPU stand for?",
+                    options: [
+                        "A. Central Processing Unit",
+                        "B. Computer Processing Unit",
+                        "C. Central Processor Unit",
+                        "D. Core Processing Unit"
+                    ],
+                    correctAnswer: "A",
+                    explanation: "CPU stands for Central Processing Unit. It is the primary component of a computer that performs most of the processing inside a computer."
+                },
+                {
+                    question: "Which of the following is not a programming language?",
+                    options: [
+                        "A. Java",
+                        "B. HTML",
+                        "C. Python",
+                        "D. Linux"
+                    ],
+                    correctAnswer: "D",
+                    explanation: "Linux is an operating system, not a programming language. Java, HTML, and Python are all programming or markup languages."
+                },
+                {
+                    question: "What does HTTP stand for?",
+                    options: [
+                        "A. Hypertext Transfer Protocol",
+                        "B. Hypertext Transit Protocol",
+                        "C. Hyper Transfer Text Protocol",
+                        "D. High-Level Transfer Protocol"
+                    ],
+                    correctAnswer: "A",
+                    explanation: "HTTP stands for Hypertext Transfer Protocol, which is the foundation of data communication on the World Wide Web."
+                },
+                {
+                    question: "Which data structure operates on a Last In, First Out (LIFO) principle?",
+                    options: [
+                        "A. Queue",
+                        "B. Stack",
+                        "C. Linked List",
+                        "D. Tree"
+                    ],
+                    correctAnswer: "B",
+                    explanation: "A Stack follows the Last In, First Out (LIFO) principle, where the last element added is the first one to be removed."
+                },
+                {
+                    question: "Which of the following is a valid IP address?",
+                    options: [
+                        "A. 192.168.1.256",
+                        "B. 172.16.254.1",
+                        "C. 256.256.256.256",
+                        "D. 10.0.0.1000"
+                    ],
+                    correctAnswer: "B",
+                    explanation: "172.16.254.1 is a valid IP address. In IPv4, each segment must be between 0 and 255."
+                }
+            ]
+        };
+        
+        let currentQuestionIndex = 0;
+        let answeredQuestions = [];
+        let skippedQuestions = [];
+        let userAnswers = [];
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+        let skippedCount = 0;
+        let incorrectQuestionIndices = [];
+        
+        // Timer variables
+        let timerEnabled = false;
+        let timerDuration = 5; // default 5 minutes
+        let timeRemaining = 0;
+        let timerInterval = null;
+        
+        // Function to initialize the quiz with provided data
+        function initializeQuiz(data) {
+            // Set title and heading
+            document.getElementById("page-title").textContent = data.title;
+            document.getElementById("quiz-heading").textContent = data.heading;
+            
+            // Update question count
+            document.getElementById("question-count").textContent = data.questions.length;
+            document.getElementById("total-questions").textContent = data.questions.length;
+            
+            // Initialize arrays
+            answeredQuestions = new Array(data.questions.length).fill(false);
+            skippedQuestions = new Array(data.questions.length).fill(false);
+            userAnswers = new Array(data.questions.length).fill(null);
+            
+            // Display first question
+            displayQuestion(0);
+        }
+        
+        // Toggle between file upload and JSON paste
+        function toggleInputMethod(method) {
+            const uploadToggle = document.getElementById('upload-toggle');
+            const pasteToggle = document.getElementById('paste-toggle');
+            const fileUploadContainer = document.getElementById('file-upload-container');
+            const jsonPasteContainer = document.getElementById('json-paste-container');
+            
+            if (method === 'upload') {
+                uploadToggle.classList.add('active');
+                pasteToggle.classList.remove('active');
+                fileUploadContainer.style.display = 'flex';
+                jsonPasteContainer.style.display = 'none';
+            } else {
+                uploadToggle.classList.remove('active');
+                pasteToggle.classList.add('active');
+                fileUploadContainer.style.display = 'none';
+                jsonPasteContainer.style.display = 'block';
+            }
+            
+            // Clear any previous error messages
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        // Process pasted JSON
+        function processPastedJson() {
+            const jsonInput = document.getElementById('json-input');
+            const errorMsg = document.getElementById('error-message');
+            
+            errorMsg.style.display = 'none';
+            
+            if (jsonInput.value.trim() === '') {
+                errorMsg.textContent = 'Error: Please paste JSON content before loading';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            // Use the common processQuizData function instead of duplicating logic
+            processQuizData(jsonInput.value);
+        }
+        
+        // Clear JSON input
+        function clearJsonInput() {
+            document.getElementById('json-input').value = '';
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        // Fill the JSON input with sample data
+        function fillSampleJson() {
+            document.getElementById('json-input').value = JSON.stringify(sampleQuizData, null, 2);
+        }
+        
+        // File handling functions
+        function handleFileSelect(event) {
+            const fileInput = document.getElementById('quiz-file');
+            const fileNameSpan = document.getElementById('file-name');
+            const errorMsg = document.getElementById('error-message');
+            
+            errorMsg.style.display = 'none';
+            
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileNameSpan.textContent = file.name;
+                
+                // Read the file
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    processQuizData(e.target.result);
+                };
+                reader.onerror = function() {
+                    errorMsg.textContent = 'Error reading file';
+                    errorMsg.style.display = 'block';
+                };
+                reader.readAsText(file);
+            }
+        }
+        
+        // Process quiz data from either file or pasted JSON
+        function processQuizData(jsonString) {
+            const errorMsg = document.getElementById('error-message');
+            
+            try {
+                const data = JSON.parse(jsonString);
+                validateQuizData(data);
+                
+                // If valid, use this data
+                quizData = data;
+                
+                // Hide upload section
+                document.getElementById('upload-section').style.display = 'none';
+                
+                // Show quiz content
+                document.getElementById('quiz-content').style.display = 'block';
+                document.getElementById('quiz-content').classList.add('fade-in');
+                
+                // Initialize quiz with the loaded data
+                initializeQuiz(quizData);
+                restartQuiz();
+                
+                // Start timer if enabled
+                if (timerEnabled) {
+                    startTimer();
+                }
+            } catch (error) {
+                errorMsg.textContent = `Error: ${error.message}`;
+                errorMsg.style.display = 'block';
+            }
+        }
+        
+        function validateQuizData(data) {
+            // Check required fields
+            if (!data.title) throw new Error("Quiz title is required");
+            if (!data.heading) throw new Error("Quiz heading is required");
+            if (!data.questions || !Array.isArray(data.questions)) 
+                throw new Error("Questions must be an array");
+            if (data.questions.length === 0) 
+                throw new Error("At least one question is required");
+            
+            // Validate each question
+            data.questions.forEach((q, index) => {
+                if (!q.question) throw new Error(`Question ${index+1} text is missing`);
+                if (!q.options || !Array.isArray(q.options) || q.options.length < 2) 
+                    throw new Error(`Question ${index+1} must have at least 2 options`);
+                if (!q.correctAnswer) 
+                    throw new Error(`Question ${index+1} is missing the correct answer`);
+                
+                // Check if correctAnswer is valid (must be one of the option's first letters)
+                const validAnswers = q.options.map(opt => opt.charAt(0));
+                if (!validAnswers.includes(q.correctAnswer))
+                    throw new Error(`Question ${index+1} has an invalid correct answer`);
+            });
+        }
+        
+        function toggleSampleDisplay() {
+            const jsonSample = document.getElementById('json-sample');
+            const sampleContent = document.getElementById('sample-content');
+            
+            if (jsonSample.style.display === 'none') {
+                jsonSample.style.display = 'block';
+                sampleContent.textContent = JSON.stringify(sampleQuizData, null, 2);
+            } else {
+                jsonSample.style.display = 'none';
+            }
+        }
+        
+        function copySampleToClipboard() {
+            const sampleContent = document.getElementById('sample-content').textContent;
+            const copyButton = document.getElementById('copy-sample');
+            
+            // Use the Clipboard API to copy text
+            navigator.clipboard.writeText(sampleContent)
+                .then(() => {
+                    // Visual feedback - show success state
+                    const originalText = copyButton.innerHTML;
+                    copyButton.classList.add('copy-success');
+                    copyButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                        </svg>
+                        Copied!
+                    `;
+                    
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        copyButton.innerHTML = originalText;
+                        copyButton.classList.remove('copy-success');
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                    alert('Failed to copy to clipboard');
+                });
+        }
+        
+        function downloadSampleJSON() {
+            const dataStr = JSON.stringify(sampleQuizData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = 'quiz_sample.json';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+        }
+        
+        // Existing functions
+        function displayQuestion(index) {
+            const questionElement = document.getElementById("question");
+            const optionsContainer = document.getElementById("options-container");
+            const feedbackElement = document.getElementById("feedback");
+            const currentQuestion = document.getElementById("current-question");
+            const skipButton = document.getElementById("skip-button");
+            const tryAgainButton = document.getElementById("try-again-button");
+            
+            // Update question number
+            currentQuestion.textContent = index + 1;
+            
+            // Display question
+            questionElement.textContent = quizData.questions[index].question;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = "";
+            
+            // Create option buttons
+            quizData.questions[index].options.forEach((option, i) => {
+                const button = document.createElement("button");
+                button.className = "option";
+                button.textContent = option;
+                
+                // If question was already answered, disable the button
+                if (answeredQuestions[index] && !skippedQuestions[index]) {
+                    button.disabled = true;
+                    // Highlight the selected answer
+                    if (option.charAt(0) === userAnswers[index]) {
+                        button.style.backgroundColor = userAnswers[index] === quizData.questions[index].correctAnswer ? "#c8e6c9" : "#ffcdd2";
+                    }
+                    // Highlight the correct answer
+                    if (option.charAt(0) === quizData.questions[index].correctAnswer) {
+                        button.style.border = "2px solid #2e7d32";
+                    }
+                } else {
+                    button.onclick = function() {
+                        checkAnswer(option.charAt(0));
+                    };
+                }
+                
+                optionsContainer.appendChild(button);
+            });
+            
+            // Show or hide feedback
+            if (answeredQuestions[index] && !skippedQuestions[index]) {
+                feedbackElement.style.display = "block";
+                if (userAnswers[index] === quizData.questions[index].correctAnswer) {
+                    feedbackElement.innerHTML = `<span class="correct">Correct!</span><br>${quizData.questions[index].explanation}`;
+                    feedbackElement.className = "result correct";
+                    tryAgainButton.style.display = "none";
+                } else {
+                    feedbackElement.innerHTML = `<span class="incorrect">Incorrect!</span> The correct answer is ${quizData.questions[index].correctAnswer}.<br>${quizData.questions[index].explanation}`;
+                    feedbackElement.className = "result incorrect";
+                    tryAgainButton.style.display = "inline-block";
+                }
+            } else {
+                feedbackElement.style.display = "none";
+                tryAgainButton.style.display = "none";
+            }
+            
+            // Update button states
+            document.getElementById("prev-button").disabled = (index === 0);
+            document.getElementById("next-button").disabled = (!answeredQuestions[index] && !skippedQuestions[index]) && (index < quizData.questions.length - 1);
+            
+            // Show/hide skip button
+            skipButton.style.display = (answeredQuestions[index] || skippedQuestions[index]) ? "none" : "inline-block";
+            
+            // Check if all questions are answered or skipped
+            checkQuizCompletion();
+        }
+
+        function checkAnswer(selected) {
+            const feedbackElement = document.getElementById("feedback");
+            const currentQ = quizData.questions[currentQuestionIndex];
+            const tryAgainButton = document.getElementById("try-again-button");
+            const skipButton = document.getElementById("skip-button");
+            
+            // Store user's answer
+            userAnswers[currentQuestionIndex] = selected;
+            
+            // Check if answer is correct
+            if (selected === currentQ.correctAnswer) {
+                feedbackElement.innerHTML = `<span class="correct">Correct!</span><br>${currentQ.explanation}`;
+                feedbackElement.className = "result correct";
+                
+                // If this was previously an incorrect answer, update counts
+                if (incorrectQuestionIndices.includes(currentQuestionIndex)) {
+                    incorrectAnswers--;
+                    correctAnswers++;
+                    // Remove from incorrect list
+                    incorrectQuestionIndices = incorrectQuestionIndices.filter(idx => idx !== currentQuestionIndex);
+                }
+                // If this was previously skipped, update counts
+                else if (skippedQuestions[currentQuestionIndex]) {
+                    skippedCount--;
+                    correctAnswers++;
+                    skippedQuestions[currentQuestionIndex] = false;
+                }
+                // Fresh correct answer
+                else {
+                    correctAnswers++;
+                }
+                
+                tryAgainButton.style.display = "none";
+            } else {
+                feedbackElement.innerHTML = `<span class="incorrect">Incorrect!</span> The correct answer is ${currentQ.correctAnswer}.<br>${currentQ.explanation}`;
+                feedbackElement.className = "result incorrect";
+                
+                // If this is a fresh incorrect answer
+                if (!answeredQuestions[currentQuestionIndex] && !skippedQuestions[currentQuestionIndex]) {
+                    incorrectAnswers++;
+                    incorrectQuestionIndices.push(currentQuestionIndex);
+                }
+                // If this was previously skipped, update counts
+                else if (skippedQuestions[currentQuestionIndex]) {
+                    skippedCount--;
+                    incorrectAnswers++;
+                    skippedQuestions[currentQuestionIndex] = false;
+                    incorrectQuestionIndices.push(currentQuestionIndex);
+                }
+                
+                tryAgainButton.style.display = "inline-block";
+            }
+            
+            // Show feedback
+            feedbackElement.style.display = "block";
+            
+            // Mark question as answered
+            answeredQuestions[currentQuestionIndex] = true;
+            
+            // Update score display
+            updateScore();
+            
+            // Enable next button
+            document.getElementById("next-button").disabled = (currentQuestionIndex === quizData.questions.length - 1);
+            
+            // Hide skip button
+            skipButton.style.display = "none";
+            
+            // Disable option buttons
+            const options = document.querySelectorAll(".option");
+            options.forEach(option => {
+                option.disabled = true;
+                if (option.textContent.charAt(0) === selected) {
+                    option.style.backgroundColor = selected === currentQ.correctAnswer ? "#c8e6c9" : "#ffcdd2";
+                }
+                if (option.textContent.charAt(0) === currentQ.correctAnswer) {
+                    option.style.border = "2px solid #2e7d32";
+                }
+            });
+            
+            // Check if all questions are answered or skipped
+            checkQuizCompletion();
+        }
+
+        function skipQuestion() {
+            // Only skip if not already answered or skipped
+            if (!answeredQuestions[currentQuestionIndex] && !skippedQuestions[currentQuestionIndex]) {
+                skippedQuestions[currentQuestionIndex] = true;
+                skippedCount++;
+                updateScore();
+            }
+            
+            // Move to next question if possible
+            if (currentQuestionIndex < quizData.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            } else {
+                // Enable review if at the last question
+                document.getElementById("next-button").disabled = true;
+                
+                // Check if all questions are answered or skipped
+                checkQuizCompletion();
+            }
+        }
+
+        function tryAgain() {
+            // Reset this question
+            answeredQuestions[currentQuestionIndex] = false;
+            
+            // If it was previously marked incorrect, update counter
+            if (userAnswers[currentQuestionIndex] !== quizData.questions[currentQuestionIndex].correctAnswer) {
+                incorrectAnswers--;
+                // Remove from incorrect list if it's there
+                incorrectQuestionIndices = incorrectQuestionIndices.filter(idx => idx !== currentQuestionIndex);
+            }
+            
+            userAnswers[currentQuestionIndex] = null;
+            updateScore();
+            
+            // Redisplay the question
+            displayQuestion(currentQuestionIndex);
+        }
+
+        function updateScore() {
+            document.getElementById("correct-count").textContent = correctAnswers;
+            document.getElementById("incorrect-count").textContent = incorrectAnswers;
+            document.getElementById("skipped-count").textContent = skippedCount;
+            document.getElementById("total-answered").textContent = correctAnswers + incorrectAnswers;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion(currentQuestionIndex);
+            }
+        }
+
+        function restartQuiz() {
+            // Hide modal if it's open
+            document.getElementById('congratulations-modal').style.display = 'none';
+            document.getElementById('fireworks').style.display = 'none';
+            
+            // Reset all variables
+            currentQuestionIndex = 0;
+            answeredQuestions = new Array(quizData.questions.length).fill(false);
+            skippedQuestions = new Array(quizData.questions.length).fill(false);
+            userAnswers = new Array(quizData.questions.length).fill(null);
+            correctAnswers = 0;
+            incorrectAnswers = 0;
+            skippedCount = 0;
+            incorrectQuestionIndices = [];
+            
+            // Update score display
+            updateScore();
+            
+            // Display first question
+            displayQuestion(currentQuestionIndex);
+            
+            // Restart timer if enabled
+            if (timerEnabled) {
+                startTimer();
+            }
+        }
+
+        function reviewWrongAnswers() {
+            // Only proceed if there are incorrect answers
+            if (incorrectQuestionIndices.length > 0) {
+                // Go to the first incorrect answer
+                currentQuestionIndex = incorrectQuestionIndices[0];
+                displayQuestion(currentQuestionIndex);
+            } else {
+                alert("No incorrect answers to review!");
+            }
+        }
+        
+        function checkQuizCompletion() {
+            // Check if all questions have been answered or skipped
+            const allAnswered = answeredQuestions.every((answered, index) => answered || skippedQuestions[index]);
+            
+            if (allAnswered) {
+                // Show congratulations modal
+                showCongratulations();
+            }
+        }
+        
+        function showCongratulations() {
+            // Stop the timer if it's running
+            stopTimer();
+            
+            // Update final score in modal
+            document.getElementById("final-correct").textContent = correctAnswers;
+            document.getElementById("final-incorrect").textContent = incorrectAnswers;
+            document.getElementById("final-skipped").textContent = skippedCount;
+            
+            // Calculate performance message
+            const totalQuestions = quizData.questions.length;
+            const scorePercentage = (correctAnswers / totalQuestions) * 100;
+            let performanceMessage = "";
+            
+            if (scorePercentage >= 90) {
+                performanceMessage = "Outstanding! You're a master of this subject! 🌟";
+            } else if (scorePercentage >= 80) {
+                performanceMessage = "Excellent work! You have a solid understanding! 👏";
+            } else if (scorePercentage >= 70) {
+                performanceMessage = "Good job! You know your stuff! 👍";
+            } else if (scorePercentage >= 60) {
+                performanceMessage = "Nice effort! You're on the right track! 😊";
+            } else {
+                performanceMessage = "Keep learning! Practice makes perfect! 📚";
+            }
+            
+            document.getElementById("performance-message").textContent = performanceMessage;
+            
+            // Show modal
+            document.getElementById("congratulations-modal").style.display = "block";
+            
+            // Show fireworks
+            document.getElementById("fireworks").style.display = "block";
+            
+            // Hide fireworks after 5 seconds
+            setTimeout(() => {
+                document.getElementById("fireworks").style.display = "none";
+            }, 5000);
+        }
+        
+        // Function to toggle between upload and quiz views
+        function showUploadSection() {
+            // Stop any running timer
+            stopTimer();
+            
+            document.getElementById('upload-section').style.display = 'block';
+            document.getElementById('upload-section').classList.add('fade-in');
+            
+            // Reset error message
+            document.getElementById('error-message').style.display = 'none';
+            
+            // Scroll to top to see upload section
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle timer options
+        function toggleTimerOptions() {
+            const timerToggle = document.getElementById('timer-toggle-switch');
+            const timerOptions = document.getElementById('timer-options');
+            
+            timerEnabled = timerToggle.checked;
+            timerOptions.style.display = timerEnabled ? 'flex' : 'none';
+        }
+        
+        // Set timer duration
+        function setTimerDuration() {
+            const durationSelect = document.getElementById('timer-duration');
+            timerDuration = parseInt(durationSelect.value);
+        }
+        
+        // Start the timer
+        function startTimer() {
+            if (!timerEnabled) return;
+            
+            // Set the timer duration before starting
+            setTimerDuration();
+            
+            // Show timer display
+            const timerDisplay = document.getElementById('quiz-timer');
+            timerDisplay.style.display = 'flex';
+            
+            // Set initial time
+            timeRemaining = timerDuration * 60; // convert to seconds
+            updateTimerDisplay();
+            
+            // Start countdown
+            clearInterval(timerInterval); // clear any existing timer
+            timerInterval = setInterval(function() {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                // Check if time is up
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+        
+        // Update timer display
+        function updateTimerDisplay() {
+            const timerElement = document.getElementById('time-remaining');
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            
+            // Format time as MM:SS
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Apply styling based on time remaining
+            if (timeRemaining <= 60) { // last minute
+                timerElement.className = 'timer-danger';
+            } else if (timeRemaining <= 300) { // last 5 minutes
+                timerElement.className = 'timer-warning';
+            } else {
+                timerElement.className = '';
+            }
+        }
+        
+        // Handle time up
+        function handleTimeUp() {
+            alert("Time's up! Your quiz will be submitted now.");
+            
+            // Mark all unanswered questions as skipped
+            for (let i = 0; i < quizData.questions.length; i++) {
+                if (!answeredQuestions[i]) {
+                    skippedQuestions[i] = true;
+                    skippedCount++;
+                }
+            }
+            
+            // Update score
+            updateScore();
+            
+            // Show completion modal
+            showCongratulations();
+        }
+        
+        // Stop timer
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Initialize event listeners
+        window.onload = function() {
+            // Timer toggle listener
+            document.getElementById('timer-toggle-switch').addEventListener('change', toggleTimerOptions);
+            document.getElementById('timer-duration').addEventListener('change', setTimerDuration);
+            
+            // Input method toggle listeners
+            document.getElementById('upload-toggle').addEventListener('click', function() {
+                toggleInputMethod('upload');
+            });
+            
+            document.getElementById('paste-toggle').addEventListener('click', function() {
+                toggleInputMethod('paste');
+            });
+            
+            // File upload event listeners
+            document.getElementById('upload-button').addEventListener('click', function() {
+                document.getElementById('quiz-file').click();
+            });
+            
+            document.getElementById('quiz-file').addEventListener('change', handleFileSelect);
+            
+            // JSON paste event listeners
+            document.getElementById('load-json-btn').addEventListener('click', processPastedJson);
+            document.getElementById('clear-json-btn').addEventListener('click', clearJsonInput);
+            
+            // Sample JSON event listeners
+            document.getElementById('sample-button').addEventListener('click', function() {
+                toggleSampleDisplay();
+                // If paste option is active, add a button to fill the textarea
+                if (document.getElementById('paste-toggle').classList.contains('active') && 
+                    document.getElementById('json-sample').style.display !== 'none') {
+                    const fillButton = document.createElement('button');
+                    fillButton.textContent = 'Use this sample';
+                    fillButton.className = 'sample-btn';
+                    fillButton.style.marginTop = '10px';
+                    fillButton.onclick = fillSampleJson;
+                    
+                    // Only add if it doesn't exist already
+                    if (!document.getElementById('fill-sample')) {
+                        fillButton.id = 'fill-sample';
+                        document.getElementById('json-sample').appendChild(fillButton);
+                    }
+                }
+            });
+            
+            document.getElementById('copy-sample').addEventListener('click', copySampleToClipboard);
+            document.getElementById('download-sample').addEventListener('click', downloadSampleJSON);
+            
+            // Quiz navigation event listeners
+            document.getElementById("next-button").addEventListener("click", nextQuestion);
+            document.getElementById("prev-button").addEventListener("click", prevQuestion);
+            document.getElementById("skip-button").addEventListener("click", skipQuestion);
+            document.getElementById("try-again-button").addEventListener("click", tryAgain);
+            document.getElementById("restart-button").addEventListener("click", restartQuiz);
+            document.getElementById("review-button").addEventListener("click", reviewWrongAnswers);
+            
+            // Change quiz button listener
+            document.getElementById('change-quiz-button').addEventListener('click', showUploadSection);
+        };
+    </script>
+</body>
+</html>
