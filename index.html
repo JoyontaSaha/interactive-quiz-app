@@ -1741,8 +1741,12 @@
             const allAnswered = answeredQuestions.every((answered, index) => answered || skippedQuestions[index]);
             
             if (allAnswered) {
-                // Show congratulations modal
-                showCongratulations();
+                // Add a delay before showing the congratulations modal
+                // This gives users time to see the feedback from the last question
+                setTimeout(() => {
+                    // Show congratulations modal
+                    showCongratulations();
+                }, 3000); // 3 second delay
             }
         }
         
