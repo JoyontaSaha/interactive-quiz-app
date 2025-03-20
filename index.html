@@ -25,120 +25,176 @@
             --json-sample-bg: #f5f5f5;
             --modal-bg: #fff;
             --modal-overlay: rgba(0,0,0,0.7);
+            
+            /* Font variables */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', 'Fira Code', Consolas, 'Courier New', monospace;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-bold: 600;
         }
         
         /* Dark mode variables */
         [data-theme="dark"] {
-            --background-color: #121212;
-            --text-color: #e0e0e0;
-            --container-bg: #1e1e1e;
-            --option-bg: #2c3e50;
-            --option-border: #34495e;
-            --option-hover: #3e5871;
-            --correct-bg: #295c3d;
-            --correct-color: #81c784;
-            --incorrect-bg: #7a2828;
-            --incorrect-color: #ef9a9a;
-            --skipped-color: #ffb74d;
-            --button-bg: #0d47a1;
-            --button-color: #ffffff;
-            --disabled-button: #424242;
-            --score-container: #1b5e20;
-            --json-sample-bg: #263238;
-            --modal-bg: #212121;
-            --modal-overlay: rgba(0,0,0,0.8);
+            --background-color: #1e1e2e;
+            --text-color: #cdd6f4;
+            --container-bg: #2a2b3c;
+            --option-bg: #313244;
+            --option-border: #45475a;
+            --option-hover: #585b70;
+            --correct-bg: #294c3d;
+            --correct-color: #a6e3a1;
+            --incorrect-bg: #5e3c40;
+            --incorrect-color: #f38ba8;
+            --skipped-color: #fab387;
+            --button-bg: #89b4fa;
+            --button-color: #1e1e2e;
+            --disabled-button: #45475a;
+            --score-container: #313244;
+            --json-sample-bg: #1e1e2e;
+            --modal-bg: #313244;
+            --modal-overlay: rgba(0,0,0,0.85);
         }
         
         body {
-            font-family: Arial, sans-serif;
+            font-family: var(--font-primary);
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: var(--background-color);
             color: var(--text-color);
+            line-height: 1.6;
             transition: all 0.3s ease;
+            font-weight: var(--font-weight-normal);
+            letter-spacing: 0.015em;
         }
+
+        h1, h2, h3 {
+            font-weight: var(--font-weight-bold);
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+        }
+
         .quiz-container {
             background-color: var(--container-bg);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
         .question {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
         .options {
-            margin-top: 10px;
+            margin-top: 15px;
         }
         .option {
-            margin: 8px 0;
-            padding: 10px;
+            margin: 10px 0;
+            padding: 14px 16px;
             background-color: var(--option-bg);
             border: 1px solid var(--option-border);
-            border-radius: 4px;
+            border-radius: 8px;
             width: 100%;
             text-align: left;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
             color: var(--text-color);
+            font-size: 1.05rem;
+            font-weight: var(--font-weight-medium);
+            letter-spacing: 0.01em;
         }
         .option:hover {
             background-color: var(--option-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         .result {
-            font-weight: bold;
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 4px;
+            font-weight: var(--font-weight-medium);
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.6;
         }
         .correct {
             background-color: var(--correct-bg);
             color: var(--correct-color);
+            border-left: 4px solid var(--correct-color);
         }
         .incorrect {
             background-color: var(--incorrect-bg);
             color: var(--incorrect-color);
+            border-left: 4px solid var(--incorrect-color);
         }
         .navigation {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            margin-top: 25px;
+            gap: 10px;
         }
         .nav-button {
-            padding: 10px 15px;
+            padding: 12px 18px;
             background-color: var(--button-bg);
             color: var(--button-color);
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             margin: 0 5px;
+            font-weight: var(--font-weight-medium);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .nav-button:disabled {
             background-color: var(--disabled-button);
             cursor: not-allowed;
+            opacity: 0.7;
         }
         .skip-button {
             background-color: var(--skipped-color);
+            color: #1e1e2e;
         }
         .try-again-button {
-            background-color: #9c27b0;
+            background-color: #cba6f7;
+            color: #1e1e2e;
         }
         .progress {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            font-weight: var(--font-weight-medium);
         }
         .score-container {
             background-color: var(--score-container);
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid var(--button-bg);
         }
         .score {
-            font-weight: bold;
+            font-weight: var(--font-weight-bold);
+            font-size: 1.1rem;
         }
         .correct-score {
             color: var(--correct-color);
@@ -151,23 +207,31 @@
         }
         .top-actions {
             display: flex;
-            margin-bottom: 20px;
-            gap: 10px;
+            margin-bottom: 25px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .action-button {
-            padding: 8px 15px;
-            border-radius: 4px;
+            padding: 10px 16px;
+            border-radius: 8px;
             border: none;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: var(--font-weight-medium);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .restart-button {
-            background-color: #f44336;
-            color: white;
+            background-color: #f38ba8;
+            color: #1e1e2e;
         }
         .review-button {
-            background-color: #009688;
-            color: white;
+            background-color: #a6e3a1;
+            color: #1e1e2e;
         }
         /* Congratulations Modal */
         .modal {
@@ -184,13 +248,14 @@
         .modal-content {
             background-color: var(--modal-bg);
             margin: 10% auto;
-            padding: 20px;
+            padding: 25px 30px;
             width: 80%;
             max-width: 600px;
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
             position: relative;
             animation: modalFadeIn 0.5s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
         @keyframes modalFadeIn {
             from {opacity: 0; transform: translateY(-50px);}
@@ -198,32 +263,44 @@
         }
         .close-modal {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 15px;
+            right: 20px;
             font-size: 28px;
             cursor: pointer;
             color: var(--text-color);
+            transition: color 0.2s;
+        }
+        .close-modal:hover {
+            color: var(--button-bg);
         }
         .modal h2 {
             color: var(--correct-color);
             margin-bottom: 20px;
+            font-size: 2rem;
         }
         .modal p {
-            font-size: 18px;
+            font-size: 1.2rem;
             margin-bottom: 20px;
+            line-height: 1.6;
         }
         .score-details {
             display: flex;
             justify-content: space-around;
-            margin: 20px 0;
+            margin: 25px 0;
+            gap: 15px;
         }
         .score-box {
-            padding: 15px;
-            border-radius: 5px;
-            width: 25%;
-            font-weight: bold;
+            padding: 18px 15px;
+            border-radius: 10px;
+            width: 28%;
+            font-weight: var(--font-weight-bold);
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        
+        .score-box:hover {
+            transform: translateY(-3px);
         }
         
         /* Enhanced score box labels */
@@ -235,165 +312,121 @@
         
         /* Score values */
         .score-box span {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: 700;
             display: block;
-            margin-top: 5px;
+            margin-top: 8px;
         }
         
         /* Dark mode specific enhancements for score boxes */
         [data-theme="dark"] .score-box {
-            color: #ffffff;
-            text-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
+            color: #cdd6f4;
+            text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(205, 214, 244, 0.1);
         }
         
         /* Specific score box colors and text colors */
         .correct-score-box {
             background-color: var(--correct-bg);
             color: var(--correct-color);
+            border-top: 4px solid var(--correct-color);
         }
         
         .incorrect-score-box {
             background-color: var(--incorrect-bg);
             color: var(--incorrect-color);
+            border-top: 4px solid var(--incorrect-color);
         }
         
         .skipped-score-box {
-            background-color: #fff3c2;
-            color: #b76e00;
-            border: 1px solid #ffca28;
-        }
-        
-        [data-theme="dark"] .correct-score-box {
-            color: #e8f5e9;
-        }
-        
-        [data-theme="dark"] .incorrect-score-box {
-            color: #ffebee;
-        }
-        
-        [data-theme="dark"] .skipped-score-box {
-            background-color: #665200;
-            color: #ffe082;
-            border: 1px solid #ffd54f;
+            background-color: #3f3223;
+            color: var(--skipped-color);
+            border-top: 4px solid var(--skipped-color);
         }
         
         .restart-quiz-btn {
             background-color: var(--button-bg);
             color: var(--button-color);
-            padding: 10px 20px;
+            padding: 14px 22px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
+            font-size: 1.1rem;
+            margin-top: 25px;
+            font-weight: var(--font-weight-medium);
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
-        /* Fireworks Animation */
-        .pyro {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1001;
-            pointer-events: none;
-        }
-        .pyro > .before, .pyro > .after {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            box-shadow: 0 0 #fff;
-            animation: 1s bang ease-out infinite backwards, 1s gravity ease-in infinite backwards, 5s position linear infinite backwards;
-        }
-        .pyro > .after {
-            animation-delay: 1.25s, 1.25s, 1.25s;
-            animation-duration: 1.25s, 1.25s, 6.25s;
-        }
-        @keyframes bang {
-            to {
-                box-shadow: -70px -115.67px #00ff73, 58px -63.67px #0051ff, -117px -95.67px #ff009d, -62px 8.33px #ff0055, -76px -89.67px #8000ff, -108px -51.67px #ffae00, 116px -85.67px #ff0033, 32px -43.67px #00ffea, -124px 31.33px #00ff4d, 116px -100.67px #ff006a, 56px -97.67px #ffd000, 30px -46.67px #ff0900, -38px 33.33px #00ffa2, 25px -123.67px #00ffe6, -54px 24.33px #00ffbb, -60px -99.67px #ff7300, 64px 10.33px #ff00bf, -79px -107.67px #0099ff, 114px 34.33px #ff0084, 24px -82.67px #ff006a;
-            }
-        }
-        @keyframes gravity {
-            to {
-                transform: translateY(200px);
-                opacity: 0;
-            }
-        }
-        @keyframes position {
-            0%, 19.9% {
-                margin-top: 10%;
-                margin-left: 40%;
-            }
-            20%, 39.9% {
-                margin-top: 5%;
-                margin-left: 30%;
-            }
-            40%, 59.9% {
-                margin-top: 0%;
-                margin-left: 70%;
-            }
-            60%, 79.9% {
-                margin-top: 5%;
-                margin-left: 20%;
-            }
-            80%, 99.9% {
-                margin-top: 0%;
-                margin-left: 80%;
-            }
+        .restart-quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
         }
         
         /* File upload styling */
         .upload-container {
             background-color: var(--score-container);
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
             text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid #89b4fa;
         }
+        
+        .upload-container h2 {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
         .file-upload {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
+        
         .upload-btn, .sample-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 8px 15px;
+            background-color: #a6e3a1;
+            color: #1e1e2e;
+            padding: 12px 18px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: var(--font-weight-medium);
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         .upload-btn {
-            background-color: #4d6bfe;
+            background-color: #89b4fa;
         }
         .sample-btn {
-            background-color: #4CAF50;
+            background-color: #a6e3a1;
         }
-        .upload-btn:hover{
-            background-color: #3c5cfb;
+        
+        .upload-btn:hover, .sample-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
         }
-        .sample-btn:hover {
-            background-color: #45a049;
-        }
+        
         .hidden {
             display: none;
         }
         .json-sample {
             background-color: var(--json-sample-bg);
-            padding: 15px;
-            border-radius: 5px;
-            margin: 10px 0;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 15px 0;
             text-align: left;
             overflow-x: auto;
-            max-height: 200px;
+            max-height: 250px;
             overflow-y: auto;
             color: var(--text-color);
+            border: 1px solid var(--option-border);
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
         }
         pre {
             margin: 0;
@@ -401,109 +434,144 @@
         }
         .error-message {
             color: var(--incorrect-color);
-            font-weight: bold;
-            margin: 10px 0;
+            font-weight: var(--font-weight-medium);
+            margin: 12px 0;
+            padding: 10px;
+            background-color: var(--incorrect-bg);
+            border-radius: 6px;
+            border-left: 4px solid var(--incorrect-color);
         }
         
         /* Input method toggle */
         .input-toggle {
             display: flex;
             justify-content: center;
-            margin-bottom: 15px;
-            gap: 10px;
+            margin-bottom: 20px;
+            gap: 15px;
         }
         .toggle-btn {
             background-color: var(--disabled-button);
-            color: var(--button-color);
-            padding: 8px 15px;
+            color: var(--text-color);
+            padding: 12px 18px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: var(--font-weight-medium);
+            transition: all 0.2s;
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
         .toggle-btn.active {
-            background-color: #4CAF50;
+            background-color: #a6e3a1;
+            color: #1e1e2e;
         }
+        
+        .toggle-btn:hover {
+            transform: translateY(-2px);
+        }
+        
         .json-input {
             width: 100%;
             min-height: 200px;
-            padding: 10px;
+            padding: 16px;
             border: 1px solid var(--option-border);
-            border-radius: 4px;
-            font-family: monospace;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
             resize: vertical;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             background-color: var(--container-bg);
             color: var(--text-color);
+            box-sizing: border-box;
+            max-width: 100%;
+            transition: border-color 0.2s;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+        
+        .json-input:focus {
+            border-color: var(--button-bg);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(137, 180, 250, 0.3);
+        }
+        
         .json-paste-container {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            width: 100%;
         }
         .paste-actions {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
+            gap: 15px;
         }
         .json-btn {
-            padding: 8px 15px;
+            padding: 12px 18px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: var(--font-weight-medium);
+            font-size: 1rem;
+            transition: all 0.2s;
             background-color: var(--button-bg);
             color: var(--button-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
         .json-btn:hover {
-            background-color: #0b7dda;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .clear-btn {
-            background-color: #f44336;
-        }
-        .clear-btn:hover {
-            background-color: #d32f2f;
+            background-color: #f38ba8;
         }
         
         /* Copy button styling */
         .sample-actions {
             display: flex;
             justify-content: flex-end;
-            margin-top: 5px;
-            gap: 5px;
+            margin-top: 8px;
+            gap: 8px;
         }
         .copy-btn {
             display: flex;
             align-items: center;
-            gap: 5px;
-            background-color: #7e57c2;
-            color: white;
-            padding: 5px 10px;
+            gap: 6px;
+            background-color: #cba6f7;
+            color: #1e1e2e;
+            padding: 8px 12px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 0.9rem;
+            font-weight: var(--font-weight-medium);
+            transition: all 0.2s;
         }
         .copy-btn:hover {
-            background-color: #673ab7;
+            background-color: #b4befe;
+            transform: translateY(-2px);
         }
         .copy-success {
-            background-color: #43a047;
+            background-color: #a6e3a1;
             transition: background-color 0.3s;
         }
         
         /* Add button styling for change quiz button */
         .change-quiz-btn {
-            background-color: #673ab7;
-            color: white;
-            padding: 8px 15px;
+            background-color: #cba6f7;
+            color: #1e1e2e;
+            padding: 12px 18px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            margin-right: 10px;
+            font-weight: var(--font-weight-medium);
+            margin-right: 12px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
         }
         
         .change-quiz-btn:hover {
-            background-color: #5e35b1;
+            background-color: #b4befe;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         
         /* Animation for hide/show */
@@ -519,53 +587,41 @@
         .btn-icon {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         .btn-icon svg {
-            width: 16px;
-            height: 16px;
-        }
-        
-        /* Ensure button text is always visible in both themes */
-        [data-theme="dark"] .nav-button,
-        [data-theme="dark"] .action-button,
-        [data-theme="dark"] .toggle-btn,
-        [data-theme="dark"] .json-btn,
-        [data-theme="dark"] .upload-btn,
-        [data-theme="dark"] .sample-btn,
-        [data-theme="dark"] .restart-quiz-btn,
-        [data-theme="dark"] .change-quiz-btn {
-            color: #ffffff;
-            font-weight: 500;
-            text-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+            width: 18px;
+            height: 18px;
         }
         
         /* Timer styling */
         .timer-container {
             background-color: var(--option-bg);
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--button-bg);
         }
         
         .timer-display {
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.3rem;
+            font-weight: var(--font-weight-bold);
             color: var(--text-color);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         
         .timer-warning {
-            color: #f57f17;
+            color: #fab387;
         }
         
         .timer-danger {
-            color: #c62828;
+            color: #f38ba8;
             animation: pulse 1s infinite;
         }
         
@@ -578,35 +634,41 @@
         .timer-options {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+            font-size: 1rem;
         }
         
         .timer-toggle {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .timer-label {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-weight: 500;
+            gap: 8px;
+            font-weight: var(--font-weight-medium);
+            font-size: 1.05rem;
         }
 
         .timer-label svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
         }
         
         /* Dark mode toggle styling */
         .theme-toggle-container {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 25px;
+            right: 25px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            background-color: var(--container-bg);
+            padding: 8px 12px;
+            border-radius: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         
         .theme-toggle {
@@ -629,7 +691,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: #45475a;
             transition: .4s;
             border-radius: 34px;
         }
@@ -641,21 +703,23 @@
             width: 22px;
             left: 4px;
             bottom: 4px;
-            background-color: white;
+            background-color: #f9f9fb;
             transition: .4s;
             border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         
         input:checked + .theme-slider {
-            background-color: #2196F3;
+            background-color: #89b4fa;
         }
         
         input:focus + .theme-slider {
-            box-shadow: 0 0 1px #2196F3;
+            box-shadow: 0 0 1px #89b4fa;
         }
         
         input:checked + .theme-slider:before {
             transform: translateX(30px);
+            background-color: #1e1e2e;
         }
         
         .theme-icon {
@@ -664,14 +728,183 @@
             justify-content: center;
             height: 24px;
             width: 24px;
+            color: var(--text-color);
         }
         
         select, option {
             background-color: var(--container-bg);
             color: var(--text-color);
             border: 1px solid var(--option-border);
-            padding: 5px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 2px rgba(137, 180, 250, 0.3);
+        }
+
+        /* Modern scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--container-bg);
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--option-border);
+            border-radius: 8px;
+            border: 3px solid var(--container-bg);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--button-bg);
+        }
+        
+        /* Apply modern fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+        
+        /* Other elements styling improvements */
+        #file-name {
+            font-weight: var(--font-weight-medium);
+            padding: 6px 10px;
+            background-color: var(--container-bg);
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        /* Toggle switch for timer */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #45475a;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #f9f9fb;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #a6e3a1;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Add new styles for selected answers */
+        .option.correct-answer {
+            background-color: var(--correct-bg) !important;
+            color: var(--correct-color) !important;
+            border: 2px solid var(--correct-color) !important;
+            font-weight: var(--font-weight-bold);
+            box-shadow: 0 0 0 1px var(--correct-color);
+        }
+
+        .option.incorrect-answer {
+            background-color: var(--incorrect-bg) !important;
+            color: var(--incorrect-color) !important;
+            border: 2px solid var(--incorrect-color) !important;
+            font-weight: var(--font-weight-bold);
+            box-shadow: 0 0 0 1px var(--incorrect-color);
+        }
+
+        .option.user-selected {
+            position: relative;
+            padding-right: 40px;
+        }
+
+        .option.user-selected::after {
+            content: "✓";
+            position: absolute;
+            right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .option.correct-answer.user-selected::after {
+            content: "✓";
+            color: var(--correct-color);
+        }
+
+        .option.incorrect-answer.user-selected::after {
+            content: "✗";
+            color: var(--incorrect-color);
+        }
+
+        /* Enhanced visibility for dark mode */
+        [data-theme="dark"] .option.correct-answer {
+            background-color: rgba(166, 227, 161, 0.25) !important;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="dark"] .option.incorrect-answer {
+            background-color: rgba(243, 139, 168, 0.25) !important;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Enhanced styles for result messages with stronger contrast */
+        [data-theme="dark"] .result {
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .result span.correct,
+        [data-theme="dark"] .result span.incorrect {
+            font-size: 1.1rem;
+            font-weight: var(--font-weight-bold);
+            padding: 5px 10px;
             border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        [data-theme="dark"] .result span.correct {
+            background-color: rgba(166, 227, 161, 0.2);
+            color: var(--correct-color);
+        }
+
+        [data-theme="dark"] .result span.incorrect {
+            background-color: rgba(243, 139, 168, 0.2);
+            color: var(--incorrect-color);
         }
     </style>
 </head>
@@ -752,7 +985,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"></path>
                 </svg>
-                Choose Quiz JSON File
+                Import Quiz File
             </button>
             <span id="file-name">No file selected</span>
         </div>
@@ -765,7 +998,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 16c-2.05 0-3.81-1.24-4.58-3h1.71c.63.9 1.68 1.5 2.87 1.5 1.93 0 3.5-1.57 3.5-3.5S13.93 9.5 12 9.5c-1.35 0-2.52.78-3.1 1.9l1.6 1.6h-4V9l1.3 1.3C8.69 8.92 10.23 8 12 8c2.76 0 5 2.24 5 5s-2.24 5-5 5z"></path>
                     </svg>
-                    Load Quiz from JSON
+                    Parse JSON
                 </button>
                 <button id="clear-json-btn" class="json-btn clear-btn btn-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -783,13 +1016,13 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"></path>
                 </svg>
-                View Sample Format
+                View Template
             </button>
             <button id="download-sample" class="sample-btn btn-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
                 </svg>
-                Download Sample JSON
+                Download Template
             </button>
             <div id="json-sample" class="json-sample" style="display: none;">
                 <div class="sample-actions">
@@ -812,19 +1045,19 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L11 13.17l6.59-6.59L19 8l-7 7z"></path>
                 </svg>
-                Change Quiz
+                Switch Quiz
             </button>
             <button id="restart-button" class="action-button restart-button btn-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
                 </svg>
-                Restart Quiz
+                Reset
             </button>
             <button id="review-button" class="action-button review-button btn-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"></path>
                 </svg>
-                Review Wrong Answers
+                Review Errors
             </button>
         </div>
         
@@ -862,13 +1095,13 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M18 6.83L16.59 5.41 12 10l-4.59-4.59L6 6.83 10.59 11.5 6 16.17l1.41 1.42L12 13l4.59 4.59L18 16.17l-4.59-4.67z"></path>
                 </svg>
-                Skip Question
+                Skip
             </button>
             <button id="try-again-button" class="nav-button try-again-button btn-icon" style="display: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
                 </svg>
-                Try Again
+                Retry
             </button>
             <button id="next-button" class="nav-button btn-icon" disabled>
                 Next
@@ -883,8 +1116,8 @@
     <div id="congratulations-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal" onclick="document.getElementById('congratulations-modal').style.display='none'">&times;</span>
-            <h2>Congratulations! 🎉</h2>
-            <p>You've completed the quiz!</p>
+            <h2>Quiz Complete! 🎉</h2>
+            <p>You've finished the quiz!</p>
             
             <div class="score-details">
                 <div class="score-box correct-score-box">
@@ -904,7 +1137,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path>
                 </svg>
-                Take Quiz Again
+                Start New Attempt
             </button>
         </div>
     </div>
@@ -1263,13 +1496,18 @@
                 // If question was already answered, disable the button
                 if (answeredQuestions[index] && !skippedQuestions[index]) {
                     button.disabled = true;
-                    // Highlight the selected answer
+                    // Highlight the selected answer and correct answer using classes
                     if (option.charAt(0) === userAnswers[index]) {
-                        button.style.backgroundColor = userAnswers[index] === quizData.questions[index].correctAnswer ? "#c8e6c9" : "#ffcdd2";
+                        button.classList.add("user-selected");
+                        if (userAnswers[index] === quizData.questions[index].correctAnswer) {
+                            button.classList.add("correct-answer");
+                        } else {
+                            button.classList.add("incorrect-answer");
+                        }
                     }
-                    // Highlight the correct answer
+                    // Always highlight the correct answer
                     if (option.charAt(0) === quizData.questions[index].correctAnswer) {
-                        button.style.border = "2px solid #2e7d32";
+                        button.classList.add("correct-answer");
                     }
                 } else {
                     button.onclick = function() {
@@ -1376,15 +1614,23 @@
             // Hide skip button
             skipButton.style.display = "none";
             
-            // Disable option buttons
+            // Apply classes to options instead of using inline styles
             const options = document.querySelectorAll(".option");
             options.forEach(option => {
                 option.disabled = true;
-                if (option.textContent.charAt(0) === selected) {
-                    option.style.backgroundColor = selected === currentQ.correctAnswer ? "#c8e6c9" : "#ffcdd2";
+                const optionLetter = option.textContent.charAt(0);
+                
+                if (optionLetter === selected) {
+                    option.classList.add("user-selected");
+                    if (selected === currentQ.correctAnswer) {
+                        option.classList.add("correct-answer");
+                    } else {
+                        option.classList.add("incorrect-answer");
+                    }
                 }
-                if (option.textContent.charAt(0) === currentQ.correctAnswer) {
-                    option.style.border = "2px solid #2e7d32";
+                
+                if (optionLetter === currentQ.correctAnswer) {
+                    option.classList.add("correct-answer");
                 }
             });
             
@@ -1545,6 +1791,7 @@
             // Stop any running timer
             stopTimer();
             
+            document.getElementById('quiz-content').style.display = 'none';
             document.getElementById('upload-section').style.display = 'block';
             document.getElementById('upload-section').classList.add('fade-in');
             
