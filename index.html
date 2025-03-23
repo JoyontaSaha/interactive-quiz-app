@@ -1287,126 +1287,122 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
-        /* Add these media queries at the end of the existing styles */
-
         /* General mobile responsiveness */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 15px;
+                max-width: 100%;
             }
 
             .quiz-container, .upload-container {
                 padding: 15px;
+                margin: 0 auto;
+                width: 95%;
+                box-sizing: border-box;
             }
 
             h1 {
                 font-size: 1.8rem;
+                text-align: center;
             }
 
             h2 {
                 font-size: 1.5rem;
+                text-align: center;
             }
 
             .option {
                 padding: 12px;
                 font-size: 1rem;
-            }
-
-            .nav-button, .action-button {
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
-
-            .score-container {
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .score {
-                width: 45%;
-                text-align: center;
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                margin: 10px auto;
             }
 
             .navigation {
                 flex-wrap: wrap;
                 gap: 8px;
+                justify-content: center;
             }
 
             .nav-button {
                 flex: 1 1 45%;
+                min-width: 120px;
+                justify-content: center;
             }
 
             .top-actions {
                 gap: 8px;
+                justify-content: center;
             }
 
             .action-button {
                 flex: 1 1 45%;
+                min-width: 120px;
+                justify-content: center;
             }
 
-            .theme-toggle-container {
-                top: 15px;
-                right: 15px;
-                padding: 6px 10px;
+            .score-container {
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
             }
 
-            .help-button-container {
-                bottom: 15px;
-                right: 15px;
-            }
-
-            .help-button {
-                width: 40px;
-                height: 40px;
+            .score {
+                width: 45%;
+                text-align: center;
+                flex: 1 1 45%;
+                min-width: 120px;
             }
 
             .timer-container {
                 flex-direction: column;
                 gap: 10px;
+                align-items: center;
             }
 
             .timer-options {
                 flex-direction: column;
                 gap: 8px;
+                align-items: center;
             }
 
             .input-toggle {
                 flex-wrap: wrap;
+                justify-content: center;
             }
 
             .toggle-btn {
                 flex: 1 1 100%;
                 margin-bottom: 8px;
+                max-width: 200px;
             }
 
-            .json-input {
-                min-height: 150px;
+            /* Center all buttons in flex containers */
+            .paste-actions, 
+            div[style*="display: flex"] {
+                justify-content: center;
+                flex-wrap: wrap;
             }
 
-            .modal-content {
-                width: 90%;
-                margin: 20% auto;
-                padding: 20px;
-            }
-
-            .score-details {
-                flex-direction: column;
-                gap: 10px;
-                align-items: center; /* Center the score boxes */
-                width: 100%; /* Ensure full width */
-            }
-
-            .score-box {
-                width: 80%; /* Make them wider but not full width */
-                max-width: 250px; /* Limit maximum width */
-                margin: 0 auto 5px auto; /* Center with margins */
+            /* Make buttons more visible with consistent sizing */
+            .json-btn, .sample-btn, .action-button, .upload-btn, .ai-generate-btn {
+                min-width: 140px;
+                margin: 5px;
+                justify-content: center;
             }
         }
 
         /* Small mobile devices */
         @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
             h1 {
                 font-size: 1.6rem;
+                margin-top: 50px; /* Make room for theme toggle */
             }
 
             h2 {
@@ -1414,45 +1410,31 @@
             }
 
             .option {
-                padding: 10px;
+                padding: 12px;
                 font-size: 0.95rem;
             }
 
             .nav-button, .action-button {
-                padding: 8px 10px;
-                font-size: 0.85rem;
+                padding: 10px;
+                font-size: 0.9rem;
+                flex: 1 1 100%;
+                min-width: 100%;
+                margin: 5px 0;
             }
 
             .score {
                 width: 100%;
-            }
-
-            .nav-button {
-                flex: 1 1 100%;
-            }
-
-            .action-button {
-                flex: 1 1 100%;
+                min-width: 100%;
+                margin: 3px 0;
             }
 
             .theme-toggle-container {
-                position: static;
-                margin: 10px 0;
-                justify-content: center;
-            }
-
-            .help-button-container {
-                bottom: 10px;
+                position: absolute;
+                top: 10px;
                 right: 10px;
-            }
-
-            .help-button {
-                width: 36px;
-                height: 36px;
-            }
-
-            .json-input {
-                min-height: 120px;
+                margin: 0;
+                justify-content: center;
+                width: auto;
             }
 
             .modal-content {
@@ -1463,13 +1445,77 @@
             }
 
             .score-box {
-                width: 90%; /* Make slightly wider on very small screens */
-                max-width: 200px; /* Smaller max-width for very small screens */
+                width: 90%;
+                max-width: 250px;
+                margin: 5px auto;
             }
 
-            /* Add space between view and download template buttons */
-            #sample-button, #download-sample {
+            /* Add space between template buttons */
+            #sample-button, #download-sample, #generate-prompt-button {
                 margin: 5px;
+                min-width: 90%;
+            }
+
+            /* Center prompt display elements */
+            #prompt-modal label,
+            #prompt-modal input,
+            #prompt-modal textarea {
+                width: 100%;
+                box-sizing: border-box;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            #prompt-modal .modal-content {
+                padding: 15px 10px;
+            }
+
+            /* Adjust chatGPT suggestion for mobile */
+            .chatgpt-suggestion {
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .ai-option {
+                min-width: 45%;
+                margin: 3px;
+                justify-content: center;
+            }
+        }
+
+        /* Improve the landing page center alignment */
+        @media (max-width: 768px) {
+            .upload-container h2 {
+                text-align: center;
+            }
+            
+            .timer-label {
+                justify-content: center;
+            }
+            
+            .json-input {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .timer-container, .score-container {
+                text-align: center;
+            }
+            
+            .progress {
+                font-weight: bold;
+            }
+            
+            /* Fix for overflowing content */
+            pre, code {
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+            
+            /* Center align flex items */
+            .timer-toggle {
+                margin: 0 auto;
             }
         }
 
