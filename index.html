@@ -307,10 +307,10 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.1rem;
-            font-weight: var(--font-weight-medium);
+            font-weight: var (--font-weight-medium);
         }
         .score-container {
-            background-color: var(--score-container);
+            background-color: var (--score-container);
             padding: 16px;
             border-radius: 10px;
             margin-bottom: 25px;
@@ -1521,152 +1521,213 @@
             z-index: 1;
             animation: pulse-shadow 2s infinite;
         }
-
-        .ai-generate-btn:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-            z-index: -1;
-        }
-
-        .ai-generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 20px rgba(167, 139, 250, 0.6);
-        }
-
-        .ai-generate-btn:hover:before {
-            left: 100%;
-        }
-
-        .ai-generate-btn svg {
-            filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
-        }
-
-        @keyframes pulse-shadow {
-            0% {
-                box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
-            }
-            50% {
-                box-shadow: 0 4px 25px rgba(167, 139, 250, 0.7);
-            }
-            100% {
-                box-shadow: 0 4px 15px rgba(167, 139, 250, 0.4);
-            }
-        }
-
-        /* Make the AI button in tutorial match the main button */
-        .tutorial-step .ai-generate-btn-icon {
-            color: #a78bfa;
-            background: linear-gradient(135deg, #6b46c1 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 2px rgba(167, 139, 250, 0.5));
-            animation: pulse-icon 2s infinite;
-        }
-
-        @keyframes pulse-icon {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Improved styling for prompt modal on mobile */
-        #prompt-modal .modal-content {
-            width: 90%;
-            max-width: 600px;
-            margin: 5% auto;
-            padding: 25px;
-        }
-
-        #prompt-modal label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: var(--font-weight-medium);
-        }
-
-        #prompt-modal input,
-        #prompt-modal textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid var(--option-border);
+        
+        /* ChatGPT suggestion notification styling - modified for inline display */
+        .chatgpt-suggestion {
+            position: relative;
+            margin: 20px auto 0;
+            background: linear-gradient(135deg, #10a37f 0%, #0a8c6a 100%);
+            color: white;
+            padding: 12px 20px;
             border-radius: 8px;
-            background-color: var(--container-bg);
-            color: var(--text-color);
-            font-family: var(--font-primary);
+            box-shadow: 0 4px 12px rgba(16, 163, 127, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: var(--font-weight-medium);
             font-size: 1rem;
-            box-sizing: border-box;
+            transform: translateY(10px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 90%;
+            flex-wrap: wrap;
         }
-
-        #prompt-modal textarea {
-            min-height: 120px;
-            resize: vertical;
+        
+        .chatgpt-suggestion.show {
+            transform: translateY(0);
+            opacity: 1;
+            animation: pulse-chatgpt 2s infinite;
         }
-
-        #prompt-modal button#generate-button {
+        
+        .chatgpt-suggestion .suggestion-title {
             width: 100%;
-            margin-bottom: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .ai-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0 5px;
+        }
+        
+        .ai-option:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .ai-option .ai-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+        
+        .gemini-option {
+            background: rgba(82, 56, 156, 0.3);
+        }
+        
+        .gemini-option:hover {
+            background: rgba(82, 56, 156, 0.5);
+        }
+        
+        @keyframes pulse-chatgpt {
+            0% {
+                box-shadow: 0 4px 12px rgba(16, 163, 127, 0.5);
+            }
+            50% {
+                box-shadow: 0 4px 18px rgba(16, 163, 127, 0.8);
+            }
+            100% {
+                box-shadow: 0 4px 12px rgba(16, 163, 127, 0.5);
+            }
+        }
+        
+        .chatgpt-suggestion .close-suggestion {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .chatgpt-suggestion:hover .close-suggestion {
+            opacity: 1;
+        }
+        
+        [data-theme="dark"] .chatgpt-suggestion {
+            box-shadow: 0 4px 15px rgba(16, 163, 127, 0.7);
+        }
+        
+        /* Add ChatGPT suggestion notification styling */
+        .chatgpt-suggestion {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #10a37f 0%, #0a8c6a 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(16, 163, 127, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: var(--font-weight-medium);
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .chatgpt-suggestion.show {
+            transform: translateY(0);
+            opacity: 1;
+            animation: bounce 1s 0.4s;
+        }
+        
+        .chatgpt-suggestion .chatgpt-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+        }
+        
+        .chatgpt-suggestion .close-suggestion {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .chatgpt-suggestion:hover .close-suggestion {
+            opacity: 1;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
         }
 
-        /* Mobile responsiveness for prompt modal */
+        [data-theme="dark"] .chatgpt-suggestion {
+            box-shadow: 0 4px 20px rgba(16, 163, 127, 0.7);
+        }
+        
+        /* Media queries for suggestion notification */
         @media (max-width: 768px) {
-            #prompt-modal .modal-content {
-                width: 95%;
-                padding: 20px 15px;
-                margin: 10% auto;
-            }
-            
-            #prompt-modal input,
-            #prompt-modal textarea {
-                padding: 10px;
-                font-size: 0.95rem;
-            }
-            
-            #prompt-modal textarea {
-                min-height: 100px;
-            }
-            
-            #prompt-display {
-                max-height: 200px;
-            }
-            
-            #prompt-display pre {
-                max-height: 160px;
+            .chatgpt-suggestion {
+                bottom: 20px;
+                right: 20px;
+                padding: 8px 16px;
                 font-size: 0.9rem;
+                gap: 8px;
+            }
+            
+            .chatgpt-suggestion .chatgpt-icon {
+                width: 24px;
+                height: 24px;
             }
         }
-
+        
         @media (max-width: 480px) {
-            #prompt-modal .modal-content {
-                width: 92%;
-                padding: 15px 12px;
-                margin: 5% auto;
+            .chatgpt-suggestion {
+                bottom: 15px;
+                right: 15px;
+                padding: 6px 12px;
+                font-size: 0.85rem;
             }
             
-            #prompt-modal h2 {
-                font-size: 1.4rem;
-                margin-bottom: 10px;
-            }
-            
-            #prompt-modal p {
-                font-size: 0.95rem;
-                margin-bottom: 15px;
-            }
-            
-            #prompt-modal button#generate-button {
-                padding: 10px 16px;
-                font-size: 0.95rem;
+            .chatgpt-suggestion .chatgpt-icon {
+                width: 20px;
+                height: 20px;
             }
         }
     </style>
@@ -1729,23 +1790,36 @@
                     </div>
                 </div>
                 <div class="tutorial-step" data-step="3">
-                    <h2>AI-Powered Quiz Creation</h2>
-                    <div style="text-align: center; margin: 15px 0;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" viewBox="0 0 24 24" class="ai-generate-btn-icon">
-                            <path d="M21.928 11.607c-.202-.488-.635-.605-.928-.633V8c0-1.103-.897-2-2-2h-6V4.61c.305-.274.5-.668.5-1.11a1.5 1.5 0 0 0-3 0c0 .442.195.836.5 1.11V6h-6c-1.103 0-2 .897-2 2v2.997l-.082.006A1 1 0 0 0 1.99 12v2a1 1 0 0 0 1 1V18c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-3.003a1 1 0 0 0 1-1v-2a1.02 1.02 0 0 0-.062-.39zM12 4a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm-7 14v-5h3v1h2v-1h2v1h2v-1h3v5H5z"/>
-                            <circle cx="8" cy="11" r="1"/>
-                            <circle cx="16" cy="11" r="1"/>
-                        </svg>
-                        <h3 style="margin-top: 10px;">Generate AI Prompts</h3>
-                        <p style="margin: 10px 0 20px 0;">Create custom prompts for ChatGPT, Claude, or other AI services to generate your quiz content.</p>
-                        <div style="background-color: var(--option-bg); padding: 12px; border-radius: 8px; text-align: left; border-left: 4px solid var(--button-bg);">
-                            <p>1. Enter your topic or paste source material</p>
-                            <p>2. Choose the number of questions</p>
-                            <p>3. Copy the generated prompt to your AI tool</p>
-                            <p>4. Paste the AI response back into the app</p>
+                    <h2 style="margin-bottom: 5px;">AI-Powered Quiz Creation</h2>
+                    <div style="text-align: center; margin: 0;">
+                        <div style="display: flex; justify-content: center; gap: 20px; margin: 8px 0; flex-wrap: wrap;">
+                            <div style="text-align: center; background: rgba(16, 163, 127, 0.15); padding: 8px; border-radius: 8px; flex: 1; min-width: 90px; max-width: 110px;">
+                                <svg width="20" height="20" viewBox="0 0 41 41" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849Z" fill="#10a37f"/>
+                                </svg>
+                                <p style="margin: 0; font-size: 0.8rem;">ChatGPT</p>
+                            </div>
+                            <div style="text-align: center; background: rgba(82, 56, 156, 0.15); padding: 8px; border-radius: 8px; flex: 1; min-width: 90px; max-width: 110px;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z" fill="white"/>
+                                    <path d="M15.8516 15.9304L21.5139 10.2681C20.1933 6.72966 16.4579 4.19995 12.1304 4.19995C6.73341 4.19995 2.34778 8.58558 2.34778 14.0001C2.34778 16.0853 2.95371 17.9968 3.99598 19.5917L9.95968 13.6105L15.8516 15.9304Z" fill="#8E75D2"/>
+                                    <path d="M21.413 10.3872L15.8516 15.9304L9.96838 13.6105L3.99597 19.5917C5.53466 21.6943 8.16424 23.035 11.1319 23.035C13.0903 23.035 14.8949 22.4204 16.3477 21.3781L21.7126 15.9827C22.6606 14.273 22.4493 11.9954 21.413 10.3872Z" fill="#5F47A5"/>
+                                </svg>
+                                <p style="margin: 0; font-size: 0.8rem;">Google Gemini</p>
+                            </div>
+                        </div>
+                        <div style="background-color: var(--option-bg); padding: 8px; border-radius: 8px; text-align: left; border-left: 4px solid var(--button-bg); margin: 8px 0; font-size: 0.85rem;">
+                            <p style="margin: 0 0 5px 0;"><b>Quick Steps:</b></p>
+                            <ol style="margin: 0; padding-left: 20px;">
+                                <li>Enter topic or paste source material</li>
+                                <li>Set number of questions</li>
+                                <li>Copy the generated prompt</li>
+                                <li>Paste into AI service (ChatGPT/Gemini)</li>
+                                <li>Paste AI response back into the app</li>
+                            </ol>
                         </div>
                     </div>
-                    <div class="no-tutorial-checkbox">
+                    <div class="no-tutorial-checkbox" style="margin-top: 10px;">
                         <input type="checkbox" id="no-tutorial-again">
                         <label for="no-tutorial-again">Don't show this again</label>
                     </div>
@@ -1896,7 +1970,7 @@
             </button>
             <button id="download-sample" class="sample-btn btn-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path>
+                    <path d="M19 9h-4V3H9v6H5l7 7 7-7V9zM5 18v2h14v-2H5z"></path>
                 </svg>
                 Download Template
             </button>
@@ -2049,6 +2123,32 @@
                     </button>
                 </div>
                 <pre id="generated-prompt" style="white-space: pre-wrap; margin: 0;"></pre>
+            </div>
+            
+            <!-- Add ChatGPT suggestion inline in the prompt modal -->
+            <div id="chatgpt-suggestion" class="chatgpt-suggestion">
+                <span class="suggestion-title">Try your prompt in these AI tools:</span>
+                <div class="ai-option chatgpt-option" id="chatgpt-option">
+                    <div class="ai-icon">
+                        <svg width="24" height="24" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="1.5">
+                            <path d="M21.928 11.607c-.202-.488-.635-.605-.928-.633V8c0-1.103-.897-2-2-2h-6V4.61c.305-.274.5-.668.5-1.11a1.5 1.5 0 0 0-3 0c0 .442.195.836.5 1.11V6h-6c-1.103 0-2 .897-2 2v2.997l-.082.006A1 1 0 0 0 1.99 12v2a1 1 0 0 0 1 1V18c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-3.003a1 1 0 0 0 1-1v-2a1.02 1.02 0 0 0-.062-.39zM12 4a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm-7 14v-5h3v1h2v-1h2v1h2v-1h3v5H5z"/>
+                            <circle cx="8" cy="11" r="1"/>
+                            <circle cx="16" cy="11" r="1"/>
+                        </svg>
+                    </div>
+                    <span>ChatGPT</span>
+                </div>
+                <div class="ai-option gemini-option" id="gemini-option">
+                    <div class="ai-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z" fill="white"/>
+                            <path d="M15.8516 15.9304L21.5139 10.2681C20.1933 6.72966 16.4579 4.19995 12.1304 4.19995C6.73341 4.19995 2.34778 8.58558 2.34778 14.0001C2.34778 16.0853 2.95371 17.9968 3.99598 19.5917L9.95968 13.6105L15.8516 15.9304Z" fill="#8E75D2"/>
+                            <path d="M21.413 10.3872L15.8516 15.9304L9.96838 13.6105L3.99597 19.5917C5.53466 21.6943 8.16424 23.035 11.1319 23.035C13.0903 23.035 14.8949 22.4204 16.3477 21.3781L21.7126 15.9827C22.6606 14.273 22.4493 11.9954 21.413 10.3872Z" fill="#5F47A5"/>
+                        </svg>
+                    </div>
+                    <span>Google Gemini</span>
+                </div>
+                <span class="close-suggestion">×</span>
             </div>
         </div>
     </div>
@@ -3107,10 +3207,10 @@
                 return;
             }
             
-            // Create a shortened sample template with just 2 questions
-            const shortSampleData = {
-                title: "Computer Science Basics Quiz",
-                heading: "Test Your CS Knowledge",
+            // Create a simplified sample template with just 1 question
+            const simpleSampleData = {
+                title: "Computer Science Quiz",
+                heading: "Test Your Knowledge",
                 questions: [
                     {
                         question: "What does CPU stand for?",
@@ -3122,58 +3222,30 @@
                         ],
                         correctAnswer: "A",
                         explanation: "CPU stands for Central Processing Unit. It is the primary component of a computer that performs most of the processing inside a computer."
-                    },
-                    {
-                        question: "Which of the following is not a programming language?",
-                        options: [
-                            "A. Java",
-                            "B. HTML",
-                            "C. Python",
-                            "D. Linux"
-                        ],
-                        correctAnswer: "D",
-                        explanation: "Linux is an operating system, not a programming language. Java, HTML, and Python are all programming or markup languages."
                     }
                 ]
             };
             
-            let prompt = `Generate a comprehensive JSON format quiz with ${numQuestions} multiple-choice questions that emphasizes effective learning through recall, interleaving, and spaced repetition. 
+            let prompt = `Generate a JSON quiz with ${numQuestions} multiple-choice questions using this format:
+${JSON.stringify(simpleSampleData, null, 2)}
 
-Instructions for question creation:
-1. Ensure questions cover a balanced mix of:
-   - Direct recall questions (testing memory of facts)
-   - Concept understanding questions (testing comprehension)
-   - Application questions (testing ability to use knowledge)
-   - Higher-order thinking questions (analysis, evaluation)
-
-2. Format requirements:
-   - Questions should be clearly worded and evenly spaced
-   - All options must be logically structured with consistent indentation
-   - Options should be plausible and avoid obvious incorrect answers
-   - Include relevant context where needed
-
-3. Learning principles to incorporate:
-   - Interleave related concepts throughout the quiz
-   - Include spaced repetition of key concepts
-   - Ensure progressive difficulty to maintain engagement
+Requirements:
+- Create diverse question types (recall, understanding, application, analysis)
+- Each question must have 4 options labeled A, B, C, D
+- The correctAnswer field must contain only a single letter (A, B, C, or D)
+- Include a comprehensive explanation for each question
+- All options should be plausible, not obviously incorrect
+- Questions should build in complexity and reinforce key concepts
 
 `;
             
             if (userText !== '') {
-                prompt += `Create the quiz based on this specific content:\n"${userText}"\n`;
+                prompt += `Create questions based on this content:\n"${userText}"\n`;
             } else {
-                prompt += `Create the quiz covering the topic: "${topicName}"\n`;
+                prompt += `Topic: "${topicName}"\n`;
             }
             
-            prompt += `\nThe output must be valid JSON and strictly follow this structure (but with your own questions):\n${JSON.stringify(shortSampleData, null, 2)}
-
-Each question MUST have:
-1. A clear, well-formatted question text
-2. Four distinct options labeled A, B, C, D
-3. The correctAnswer field containing just the letter (A, B, C, or D)
-4. A comprehensive explanation that clarifies why the correct answer is right and why others are wrong
-
-Ensure questions are organized to build upon each other and reinforce learning through strategic spacing and interleaving.`;
+            prompt += `\nEnsure the output is strictly valid JSON and adheres to the example's structure. The JSON should be properly formatted and ready for direct import into the quiz application.`;
             
             // Update the pre element's content
             generatedPromptTextarea.textContent = prompt;
@@ -3193,6 +3265,9 @@ Ensure questions are organized to build upon each other and reinforce learning t
                     `;
                     copyPromptButton.classList.add('copy-success');
                     
+                    // Show ChatGPT suggestion notification inside modal
+                    showChatGPTSuggestion();
+                    
                     setTimeout(() => {
                         copyPromptButton.innerHTML = originalText;
                         copyPromptButton.classList.remove('copy-success');
@@ -3202,6 +3277,53 @@ Ensure questions are organized to build upon each other and reinforce learning t
                     console.error('Failed to copy prompt: ', err);
                     alert('Failed to copy prompt to clipboard. Please copy manually.');
                 });
+        });
+        
+        // Function to show ChatGPT suggestion notification
+        function showChatGPTSuggestion() {
+            const chatgptSuggestion = document.getElementById('chatgpt-suggestion');
+            chatgptSuggestion.classList.add('show');
+            
+            // Hide after 15 seconds if not clicked (increased from 10 seconds since there are more options)
+            setTimeout(() => {
+                if (chatgptSuggestion.classList.contains('show')) {
+                    chatgptSuggestion.classList.remove('show');
+                }
+            }, 15000);
+        }
+        
+        // Add event listeners for ChatGPT and Gemini suggestion
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatgptSuggestion = document.getElementById('chatgpt-suggestion');
+            const closeButton = chatgptSuggestion.querySelector('.close-suggestion');
+            const chatgptOption = document.getElementById('chatgpt-option');
+            const geminiOption = document.getElementById('gemini-option');
+            
+            // Open ChatGPT when ChatGPT option is clicked
+            chatgptOption.addEventListener('click', (e) => {
+                window.open('https://chatgpt.com/', '_blank');
+                chatgptSuggestion.classList.remove('show');
+                
+                // Close the prompt modal after opening AI service
+                const promptModal = document.getElementById('prompt-modal');
+                promptModal.style.display = 'none';
+            });
+            
+            // Open Google Gemini when Gemini option is clicked
+            geminiOption.addEventListener('click', (e) => {
+                window.open('https://gemini.google.com/', '_blank');
+                chatgptSuggestion.classList.remove('show');
+                
+                // Close the prompt modal after opening AI service
+                const promptModal = document.getElementById('prompt-modal');
+                promptModal.style.display = 'none';
+            });
+            
+            // Close suggestion when X is clicked
+            closeButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                chatgptSuggestion.classList.remove('show');
+            });
         });
     </script>
 </body>

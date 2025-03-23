@@ -17,6 +17,7 @@ A versatile, feature-rich web application for creating and taking interactive qu
 ### Quiz Creation and Management
 - **Multiple Import Methods**: Upload JSON quiz files or paste quiz data directly
 - **AI-Powered Quiz Generation**: Create custom prompts for AI services to generate quizzes
+- **Multi-AI Support**: Choose between ChatGPT and Google Gemini for prompt generation
 - **Sample Quiz Template**: View, copy, or download the quiz format template
 - **JSON Validation**: Built-in validation ensures quiz data meets required format
 
@@ -77,7 +78,7 @@ The app uses a specific JSON format for quizzes:
 
 ## AI Prompt Generation
 
-The app includes a feature to generate prompts for AI services like ChatGPT that will produce quizzes in the correct format. 
+The app includes a feature to generate prompts for AI services that will produce quizzes in the correct format.
 
 To use this feature:
 1. Click "AI Prompt Generator"
@@ -85,8 +86,13 @@ To use this feature:
 3. Select the number of questions
 4. Click "Generate Prompt" 
 5. Copy the generated prompt
-6. Paste it into your AI service
-7. Copy the AI's response back into the app
+6. Choose your preferred AI service (ChatGPT or Google Gemini)
+7. Paste the prompt into the selected AI service
+8. Copy the AI's response back into the app
+
+### Supported AI Services:
+- **ChatGPT**: OpenAI's conversational AI with strong quiz generation capabilities
+- **Google Gemini**: Google's multimodal AI model with advanced reasoning abilities
 
 ## Getting Started
 
