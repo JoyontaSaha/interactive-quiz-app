@@ -1,97 +1,124 @@
-# Interactive Quiz Application
+# Interactive Quiz App
 
-This project is an interactive quiz application that allows users to upload or paste quiz data in JSON format and take quizzes with a timer option. The application supports both light and dark themes and provides feedback on quiz performance. Easily generate quizzes using language models and customize your learning experience.
+A versatile, feature-rich web application for creating and taking interactive quizzes on any topic, with powerful learning tools and a customizable interface.
 
-## 🚀 Live Demo
-**Try it now:** [https://joyontasaha.github.io/interactive-quiz-app/](https://joyontasaha.github.io/interactive-quiz-app/)
+🎉 **Try the Live Demo Now!**: [Interactive Quiz App](https://joyontasaha.github.io/interactive-quiz-app/) 🚀
+
+## App Screenshots
+
+### Home Screen
+![Home Screen](resources/home.png)
+
+### Quiz Interface
+![Quiz Interface](resources/quiz.png)
 
 ## Features
-- Upload or paste quiz data in JSON format.
-- Toggle between light and dark themes.
-- Timer functionality with customizable durations.
-- Review incorrect answers and retake the quiz.
-- Visual feedback with animations and modals.
 
-## Getting Started
+### Quiz Creation and Management
+- **Multiple Import Methods**: Upload JSON quiz files or paste quiz data directly
+- **AI-Powered Quiz Generation**: Create custom prompts for AI services to generate quizzes
+- **Sample Quiz Template**: View, copy, or download the quiz format template
+- **JSON Validation**: Built-in validation ensures quiz data meets required format
 
-### Prerequisites
-- A modern web browser (e.g., Chrome, Firefox, Edge).
+### Quiz Interface
+- **Intuitive Navigation**: Move between questions with previous/next buttons
+- **Progress Tracking**: See your current position and overall progress
+- **Comprehensive Scoring**: Track correct, incorrect, and skipped answers
+- **Detailed Feedback**: Get explanations for both correct and incorrect answers
+- **Answer Highlighting**: Visual indicators for correct/incorrect selections
+- **Question History**: Navigate freely between all attempted questions
 
-### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/JoyontaSaha/interactive-quiz-app.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd interactive-quiz-app
-   ```
-3. Open `index.html` in your web browser to start the application.
+### Learning Tools
+- **Retry Questions**: Option to try again on incorrectly answered questions
+- **Skip Questions**: Skip difficult questions and return to them later
+- **Review Errors**: Focus specifically on questions answered incorrectly
+- **Reset Quiz**: Start over with a fresh attempt at any time
+- **Quiz Switching**: Change to a different quiz without refreshing the page
+- **Interactive Tutorial**: Step-by-step guide explaining all app features
 
-## Usage
-1. Choose to upload a quiz JSON file or paste JSON data directly into the application.
-2. Select the desired timer duration if needed.
-3. Start the quiz and answer the questions.
-4. Review your performance and retake the quiz if desired.
+### Customization Options
+- **Timer Mode**: Set time limits for quiz sessions with customizable durations
+- **Dark/Light Themes**: Choose between light and dark visual modes
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Multiple Duration Options**: Select from various time limits for timed quizzes
+- **Accessibility Features**: High contrast options and readable font sizes
 
-## JSON Format
-The quiz JSON should follow this structure:
+### Performance Analysis
+- **Completion Summary**: Detailed statistics after quiz completion
+- **Performance Feedback**: Personalized messages based on quiz performance
+- **Visual Celebration**: Animated fireworks display for completed quizzes
+- **Score Breakdown**: Clear visualization of correct, incorrect, and skipped questions
+- **Performance Rating**: Contextual feedback based on your score percentage
+
+## Quiz Format
+
+The app uses a specific JSON format for quizzes:
+
 ```json
 {
   "title": "Quiz Title",
-  "heading": "Quiz Heading",
+  "heading": "Quiz Heading Shown on Page",
   "questions": [
     {
-      "question": "Question text",
+      "question": "Question text goes here?",
       "options": [
-        "A. Option 1",
-        "B. Option 2",
-        "C. Option 3",
-        "D. Option 4"
+        "A. First option",
+        "B. Second option",
+        "C. Third option",
+        "D. Fourth option"
       ],
       "correctAnswer": "A",
-      "explanation": "Explanation for the correct answer."
+      "explanation": "Explanation of why A is correct and other options are incorrect."
     }
+    // Additional questions follow the same format
   ]
 }
 ```
 
-## Creating a Quiz with a Language Model
+## AI Prompt Generation
 
-To create a quiz using a language model, you can prompt the model with a topic and request it to generate questions and answers in the specified JSON format. Here's a step-by-step guide:
+The app includes a feature to generate prompts for AI services like ChatGPT that will produce quizzes in the correct format. 
 
-1. **Choose a Topic**: Decide on the subject or topic for your quiz.
+To use this feature:
+1. Click "AI Prompt Generator"
+2. Enter your topic or paste specific content
+3. Select the number of questions
+4. Click "Generate Prompt" 
+5. Copy the generated prompt
+6. Paste it into your AI service
+7. Copy the AI's response back into the app
 
-2. **Prompt the Language Model**: Use a language model (such as GPT) to generate quiz questions. You can use a prompt like:
-   
-   "Generate a quiz on [Your Topic] with 5 questions. Each question should have 4 options labeled A, B, C, and D, and include the correct answer and an explanation. Format the output as JSON."
+## Getting Started
 
-3. **Format the Output**: Ensure the generated output matches the JSON structure required by the application:
-   ```json
-   {
-     "title": "Your Quiz Title",
-     "heading": "Your Quiz Heading",
-     "questions": [
-       {
-         "question": "Question text",
-         "options": [
-           "A. Option 1",
-           "B. Option 2",
-           "C. Option 3",
-           "D. Option 4"
-         ],
-         "correctAnswer": "A",
-         "explanation": "Explanation for the correct answer."
-       }
-     ]
-   }
-   ```
+1. **Clone the Repository**:  
+  ```bash
+  git clone https://github.com/JoyontaSaha/interactive-quiz-app.git
+  ```
+2. **Navigate to the Project Directory**:  
+  ```bash
+  cd interactive-quiz-app
+  ```
+3. **Open the Application**:  
+  Open `index.html` in any modern web browser to launch the app.
+4. **Explore the Features**:  
+  - Start with the provided sample quiz or import your own quiz data.
+  - Follow the interactive tutorial for a step-by-step walkthrough of the app's features.
 
-4. **Load the Quiz**: Once you have the JSON formatted correctly, you can upload it to the application or paste it directly to start the quiz.
+Enjoy creating and taking quizzes with the Interactive Quiz App!
 
-This approach allows you to quickly generate quizzes on various topics using the power of language models.
+## Browser Compatibility
+
+The app is compatible with all modern browsers:
+- Chrome (recommended)
+- Firefox
+- Safari
+- Edge
 
 ## Contributing
-Contributions are welcome! Please fork the repository and submit a pull request.
 
-Feel free to customize this README file to better fit your project's needs. 
+Contributions are welcome! Feel free to submit issues or pull requests for new features or bug fixes.
+
+## License
+
+Free for all to use.
+
